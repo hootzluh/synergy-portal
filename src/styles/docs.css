@@ -1,0 +1,110 @@
+.docs-page-container {
+  display: flex;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: #e5e5e5;
+  font-family: 'Inter', sans-serif;
+}
+
+.docs-sidebar {
+  width: 300px;
+  background: #111827;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #2d2d2d;
+}
+
+.sidebar-category {
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-category-header {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #93c5fd;
+  font-size: 1.1rem;
+}
+
+.sidebar-category ul {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 0.5rem;
+}
+
+.sidebar-category li {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-category a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.sidebar-category a.active-link {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.docs-content-container {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.doc-searchbar {
+  margin-bottom: 1rem;
+}
+
+.doc-searchbar input {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.doc-viewer {
+  background: #111827;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+}
+
+.doc-updated {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sticky Footer */
+footer {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 20px;
+  background: #0f0f0f;
+  text-align: center;
+  color: #ccc;
+  font-size: 0.85rem;
+}
