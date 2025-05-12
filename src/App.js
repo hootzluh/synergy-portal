@@ -1,40 +1,50 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect, Suspense, lazy } from "react";
+import { Routes, Route } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
-import DocViewer from './components/DocViewer';
+
 // Layout components
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import LoadingScreen from "./components/LoadingScreen";
-// Pages
-import HomePage from "./components/pages/HomePage";
-import IcoPresalePage from "./components/pages/IcoPresalePage";
-import ExplorerPage from "./components/pages/ExplorerPage";
-import WalletPage from "./components/pages/WalletPage";
-import DashboardPage from "./components/pages/DashboardPage";
-import DocsPage from "./components/pages/DocsPage";
-import SettingsPage from "./components/pages/SettingsPage";
-import GasStationPage from "./components/pages/GasStationPage";
+
+// Lazy load page components for better performance
+const HomePage = lazy(() => import("./components/pages/HomePage"));
+const IcoPresalePage = lazy(() => import("./components/pages/IcoPresalePage"));
+const ExplorerPage = lazy(() => import("./components/pages/ExplorerPage"));
+const WalletPage = lazy(() => import("./components/pages/WalletPage"));
+const DashboardPage = lazy(() => import("./components/pages/DashboardPage"));
+const DocsPage = lazy(() => import("./components/pages/DocsPage"));
+const SettingsPage = lazy(() => import("./components/pages/SettingsPage"));
+const GasStationPage = lazy(() => import("./components/pages/GasStationPage"));
+
+// Fallback component for lazy loading
+const PageLoadingFallback = () => (
+    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <LoadingScreen isLoading={true} />
+    </Box>
+);
 
 function App() {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate loading time for blockchain initialization
         const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 3000); // 3 seconds loading time
+            setIsInitialLoading(false);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, []);
 
+    if (isInitialLoading) {
+        return <LoadingScreen isLoading={true} />;
+    }
+
     return (
-        <>
-            <LoadingScreen isLoading={isLoading} />
+        <Box minH="100vh" display="flex" flexDirection="column">
             <div className="parallax-bg"></div>
-            <Box minH="100vh" display="flex" flexDirection="column">
-                <Navbar />
-                <Box flex="1" py={4}>
+            <Navbar />
+            <Box flex="1" minHeight="0" overflow="hidden">
+                <Suspense fallback={<PageLoadingFallback />}>
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/ico-presale" element={<IcoPresalePage />} />
@@ -42,14 +52,14 @@ function App() {
                         <Route path="/wallet" element={<WalletPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/docs" element={<DocsPage />} />
-                        <Route path="/docs/:category/:slug" element={<DocViewer />} />
+                        <Route path="/docs/:category/:slug" element={<DocsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/gas-station" element={<GasStationPage />} />
                     </Routes>
-                </Box>
-                <Footer />
+                </Suspense>
             </Box>
-        </>
+            <Footer />
+        </Box>
     );
 }
 

@@ -1,32 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/docs.css';
 
-const docsIndex = {
-  'Getting Started': [
-    { title: 'Introduction to Synergy Network', slug: 'introduction' },
-    { title: 'Network Architecture', slug: 'network-architecture' },
-    { title: 'Creating a Wallet', slug: 'creating-a-wallet' },
-    { title: 'Obtaining SYN Tokens', slug: 'obtaining-syn-tokens' },
-    { title: 'Making Your First Transaction', slug: 'first-transaction' },
-  ],
-  'Core Concepts': [
-    { title: 'Proof of Synergy', slug: 'proof-of-synergy' },
-    { title: 'Validator Clusters', slug: 'validator-clusters' },
-    { title: 'Synergy Points System', slug: 'synergy-points' },
-    { title: 'Post-Quantum Cryptography', slug: 'pqc' },
-    { title: 'Synergy Naming System (SNS)', slug: 'sns' },
-  ]
-};
-
 const DocSidebar = () => {
-  const [openSections, setOpenSections] = useState(() =>
-    Object.keys(docsIndex).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-  );
+  const [docsIndex, setDocsIndex] = useState({});
+  const [openSections, setOpenSections] = useState({});
   const location = useLocation();
 
-  const toggleSection = (key) =>
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  useEffect(() => {
+    fetch('/docs/docs_index.json')
+      .then((res) => res.json())
+      .then((data) => {
+        setDocsIndex(data);
+        // Automatically open all categories initially
+        const initialState = {};
+        Object.keys(data).forEach((cat) => {
+          initialState[cat] = true;
+        });
+        setOpenSections(initialState);
+      })
+      .catch((err) => {
+        console.error('Failed to load docs_index.json', err);
+      });
+  }, []);
+
+  const toggleSection = (category) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
 
   return (
     <aside className="docs-sidebar">
@@ -36,7 +39,7 @@ const DocSidebar = () => {
             className="sidebar-category-header"
             onClick={() => toggleSection(category)}
           >
-            <strong>{category}</strong>
+            <strong>{category.replace(/-/g, ' ')}</strong>
             <span>{openSections[category] ? '−' : '+'}</span>
           </div>
           {openSections[category] && (
@@ -44,7 +47,7 @@ const DocSidebar = () => {
               {pages.map(({ title, slug }) => (
                 <li key={slug}>
                   <Link
-                    to={`/docs/${category.toLowerCase().replace(/ /g, '-')}/${slug}`}
+                    to={`/docs/${category}/${slug}`}
                     className={location.pathname.includes(slug) ? 'active-link' : ''}
                   >
                     {title}

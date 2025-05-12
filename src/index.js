@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {ChakraProvider} from "@chakra-ui/react";
-import {BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import {WalletProvider} from "./services/walletContext";
 import theme from "./theme";
 import App from "./App";
@@ -13,11 +13,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <ChakraProvider theme={theme}>
-            <Router>
+            <BrowserRouter>
                 <WalletProvider>
                     <App />
                 </WalletProvider>
-            </Router>
+            </BrowserRouter>
         </ChakraProvider>
     </React.StrictMode>
 );

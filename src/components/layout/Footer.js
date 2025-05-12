@@ -5,54 +5,42 @@ import {
   Stack,
   Text,
   Link,
-  useColorModeValue,
   Flex,
   Divider,
   HStack,
   Icon
 } from '@chakra-ui/react';
 import { FaTwitter, FaGithub, FaDiscord, FaTelegram } from 'react-icons/fa';
+import '../../styles/footer.css';
 
 export default function Footer() {
   return (
-    <Box
-      className="glass-footer"
-      color={useColorModeValue('gray.600', 'white')}
-    >
-      <Container
-        as={Stack}
-        maxW={'7xl'}
-        py={6}
-        spacing={4}
-      >
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          justify={{ base: 'center', md: 'space-between' }}
-          align={{ base: 'center', md: 'center' }}
-        >
-          <Stack direction={'row'} spacing={6}>
-            <Link href={'#'}>Home</Link>
-            <Link href={'#'}>About</Link>
-            <Link href={'#'}>Blog</Link>
-            <Link href={'#'}>Contact</Link>
+    <Box as="footer" className="footer-container">
+      <Container as={Stack} className="footer-inner">
+        <Flex className="footer-top">
+          <Stack direction="row" className="footer-nav">
+            <Link href="#">Home</Link>
+            <Link href="#">About</Link>
+            <Link href="#">Blog</Link>
+            <Link href="#">Contact</Link>
           </Stack>
-          <HStack spacing={6} mt={{ base: 4, md: 0 }}>
-            <Link href={'#'} isExternal className="glow-effect">
-              <Icon as={FaTwitter} w={5} h={5} />
+          <HStack className="footer-social">
+            <Link href="#" isExternal className="glow-effect">
+              <Icon as={FaTwitter} />
             </Link>
-            <Link href={'#'} isExternal className="glow-effect">
-              <Icon as={FaGithub} w={5} h={5} />
+            <Link href="#" isExternal className="glow-effect">
+              <Icon as={FaGithub} />
             </Link>
-            <Link href={'#'} isExternal className="glow-effect">
-              <Icon as={FaDiscord} w={5} h={5} />
+            <Link href="#" isExternal className="glow-effect">
+              <Icon as={FaDiscord} />
             </Link>
-            <Link href={'#'} isExternal className="glow-effect">
-              <Icon as={FaTelegram} w={5} h={5} />
+            <Link href="#" isExternal className="glow-effect">
+              <Icon as={FaTelegram} />
             </Link>
           </HStack>
         </Flex>
-        <Divider />
-        <Text pt={2} fontSize={'sm'} textAlign={'center'}>
+        <Divider className="footer-divider" />
+        <Text className="footer-copy">
           © {new Date().getFullYear()} Synergy Network. All rights reserved.
         </Text>
       </Container>

@@ -1,18 +1,27 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .docs-page-container {
   display: flex;
-  height: 100vh;
+  flex-direction: row;
+  height: 100%;
   background-color: #1a1a1a;
   color: #e5e5e5;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
 }
 
 .docs-sidebar {
-  width: 300px;
-  background: #111827;
-  padding: 20px;
   overflow-y: auto;
-  border-right: 1px solid #2d2d2d;
+  overflow-x: hidden;
+  height: 100%;
+  max-height: 100vh;
+  word-break: break-word;
 }
+
 
 .sidebar-category {
   margin-bottom: 1.5rem;
@@ -49,10 +58,12 @@
 .docs-content-container {
   flex: 1;
   padding: 2rem;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .doc-searchbar {
@@ -74,6 +85,8 @@
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  flex: 1;
+  overflow-y: auto;
 }
 
 .doc-updated {
@@ -98,13 +111,40 @@
   }
 }
 
-/* Sticky Footer */
+/* Footer: fixed and full-width */
 footer {
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  padding: 10px 20px;
+  width: 100%;
+  height: 100px;
+  padding: 0;
+  margin: 0;
   background: #0f0f0f;
   text-align: center;
   color: #ccc;
   font-size: 0.85rem;
+  border-top: 1px solid #2d2d2d;
+}
+
+.doc-searchbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.doc-search-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.doc-search-button:hover {
+  background-color: #1d4ed8;
 }

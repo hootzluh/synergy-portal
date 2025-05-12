@@ -1,49 +1,28 @@
+// File: src/components/DocViewer.js
+
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import '../styles/docs.css';
 
-const DocViewer = () => {
-  const { category, slug } = useParams();
+const DocViewer = ({ category, doc }) => {
   const [content, setContent] = useState('');
   const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
-    const path = `/docs/${category}/${slug}.md`;
+    const path = `/docs/${category}/${doc}.md`;
     fetch(path)
-      .then(res => {
-        if (!res.ok) throw new Error('404');
+      .then((res) => {
+        setLastUpdated(new Date(res.headers.get('Last-Modified')).toLocaleString());
         return res.text();
       })
-      .then(text => {
-        setContent(text);
-        setLastUpdated(new Date().toLocaleDateString());
-      })
-      .catch(() => setContent('## 404\nDocumentation not found.'));
-  }, [category, slug]);
+      .then(setContent)
+      .catch(() => setContent('# 404\nDocument not found.'));
+  }, [category, doc]);
 
   return (
-    <div className="doc-viewer fade-in">
-      <ReactMarkdown
-        children={content}
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\\w+)/.exec(className || '');
-            return !inline && match ? (
-              <SyntaxHighlighter style={materialDark} language={match[1]} PreTag="div" {...props}>
-                {String(children).replace(/\\n$/, '')}
-              </SyntaxHighlighter>
-            ) : (
-              <code className={className} {...props}>
-                {children}
-              </code>
-            );
-          }
-        }}
-      />
-      <div className="doc-updated">Last updated: {lastUpdated}</div>
+    <div className="doc-viewer">
+      <div className="last-updated">Last updated: {lastUpdated}</div>
+      <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );
 };
