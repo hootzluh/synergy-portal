@@ -1,27 +1,32 @@
+/* === Layout Root === */
 html,
 body {
   height: 100%;
   margin: 0;
-}
-
-.docs-page-container {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
+  padding: 0;
   background-color: #1a1a1a;
   color: #e5e5e5;
   font-family: 'Inter', sans-serif;
   overflow: hidden;
 }
 
-.docs-sidebar {
-  overflow-y: auto;
-  overflow-x: hidden;
+.docs-page-container {
+  display: flex;
+  flex-direction: row;
   height: 100%;
-  max-height: 100vh;
-  word-break: break-word;
+  /* overflow: hidden; */
 }
 
+/* === Sidebar === */
+.docs-sidebar {
+  width: 300px;
+  background: #111827;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid #2d2d2d;
+  height: 100vh;
+}
 
 .sidebar-category {
   margin-bottom: 1.5rem;
@@ -33,6 +38,7 @@ body {
   cursor: pointer;
   color: #93c5fd;
   font-size: 1.1rem;
+  user-select: none;
 }
 
 .sidebar-category ul {
@@ -48,25 +54,21 @@ body {
 .sidebar-category a {
   color: #3b82f6;
   text-decoration: none;
+  display: block;
+  padding: 4px 2px;
+  word-break: break-word;
 }
 
 .sidebar-category a.active-link {
   font-weight: bold;
   text-decoration: underline;
+  color: #60a5fa;
 }
 
-.docs-content-container {
-  flex: 1;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 100%;
-  overflow: hidden;
-  min-height: 0;
-}
-
+/* === Search Bar === */
 .doc-searchbar {
+  display: flex;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
@@ -80,13 +82,40 @@ body {
   color: #fff;
 }
 
+.doc-search-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.doc-search-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* === Content Section === */
+.docs-content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  /* overflow: hidden; */
+  min-height: 0;
+  height: 100%;
+}
+
 .doc-viewer {
+  flex: 1;
+  overflow-y: auto;
   background: #111827;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-  flex: 1;
-  overflow-y: auto;
+  color: #e5e5e5;
 }
 
 .doc-updated {
@@ -95,6 +124,70 @@ body {
   color: #9ca3af;
 }
 
+/* === Markdown Content Styling === */
+.doc-viewer h1,
+.doc-viewer h2,
+.doc-viewer h3,
+.doc-viewer h4 {
+  color: #93c5fd;
+  margin-top: 1.5rem;
+}
+
+.doc-viewer p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.doc-viewer ul,
+.doc-viewer ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.doc-viewer code {
+  background-color: #1f2937;
+  color: #eab308;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.doc-viewer pre {
+  background-color: #0f172a;
+  color: #f8f8f2;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.doc-viewer table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.doc-viewer th,
+.doc-viewer td {
+  border: 1px solid #374151;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.doc-viewer th {
+  background-color: #1f2937;
+  color: #e5e5e5;
+}
+
+.doc-viewer blockquote {
+  border-left: 4px solid #60a5fa;
+  padding-left: 1rem;
+  color: #9ca3af;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+/* === Animation === */
 .fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
@@ -111,12 +204,12 @@ body {
   }
 }
 
-/* Footer: fixed and full-width */
+/* === Footer === */
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
+  height: 80px;
   padding: 0;
   margin: 0;
   background: #0f0f0f;
@@ -126,25 +219,40 @@ footer {
   border-top: 1px solid #2d2d2d;
 }
 
-.doc-searchbar {
+.docs-page-layout {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.docs-page-container {
+  display: flex;
+  flex-grow: 1;
   width: 100%;
+  /* overflow: hidden; */
 }
 
-.doc-search-button {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 10px;
-  height: 40px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.docs-sidebar {
+  width: 300px;
+  background: #111827;
+  padding: 20px;
+  border-right: 1px solid #2d2d2d;
+  overflow: auto;
 }
 
-.doc-search-button:hover {
-  background-color: #1d4ed8;
+.docs-content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  overflow: auto;
+  background-color: #1a1a1a;
+  color: #e5e5e5;
+}
+
+/* Optional - ensure footer only appears at page end */
+footer {
+  position: relative;
+  margin-top: auto;
+  width: 100%;
 }

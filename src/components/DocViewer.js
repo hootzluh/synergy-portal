@@ -21,8 +21,8 @@ const DocViewer = ({ category, doc }) => {
 
   return (
     <div className="doc-viewer">
-      <div className="last-updated">Last updated: {lastUpdated}</div>
       <ReactMarkdown>{content}</ReactMarkdown>
+      <div className="last-updated">Last updated: {lastUpdated}</div>
     </div>
   );
 };

@@ -1,19 +1,6 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  /* lock scroll globally */
-}
 
-body {
-  perspective: 1px;
-  transform-style: preserve-3d;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  /* this line is key */
-}
+
+
 
 .parallax-bg {
   position: fixed;
