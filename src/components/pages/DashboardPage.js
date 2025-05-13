@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Container,
@@ -14,30 +14,23 @@ import {
   Icon,
   Card,
   CardBody,
-  CardHeader,
-  Divider,
   useColorModeValue,
-  Grid,
-  GridItem,
   HStack,
-  Badge
+  Badge,
+  Spinner
 } from '@chakra-ui/react';
-import { FaServer, FaCubes, FaExchangeAlt, FaUsers, FaNetworkWired } from 'react-icons/fa';
+import { FaServer, FaCubes, FaExchangeAlt, FaUsers, FaNetworkWired, FaClock } from 'react-icons/fa';
 
-// Mock data for demonstration
-const networkStats = {
-  blocks: 1458732,
-  transactions: 32567891,
-  validators: 128,
-  activeNodes: 512,
-  blockTime: 2.5,
-  tps: 4200,
-  synPoints: 2467890,
-  activeClusters: 12,
-  synPrice: 0.025,
-  priceChange: 5.2,
-  marketCap: 250000000,
-  totalStaked: 3500000000
+const RPC_URL = 'http://localhost:8545';
+
+const fetchRPC = async (method, params = []) => {
+  const response = await fetch(RPC_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 })
+  });
+  const data = await response.json();
+  return data.result;
 };
 
 const StatCard = ({ title, value, helpText, icon, change, isIncrease }) => {
@@ -80,24 +73,47 @@ const StatCard = ({ title, value, helpText, icon, change, isIncrease }) => {
 export default function DashboardPage() {
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const [stats, setStats] = useState(null);
 
-  // Format large numbers with commas
   const formatNumber = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num?.toLocaleString() ?? '-';
   };
+
+  const formatTimeAgo = (timestamp) => {
+    if (!timestamp) return '-';
+    const secondsAgo = Math.floor(Date.now() / 1000) - Number(timestamp);
+    if (secondsAgo < 60) return `${secondsAgo}s ago`;
+    if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)}m ago`;
+    if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)}h ago`;
+    return `${Math.floor(secondsAgo / 86400)}d ago`;
+  };
+
+  useEffect(() => {
+    async function loadStats() {
+      const [blockNumber, lastBlockTime, txCount, avgBlockTime, recentTxs] = await Promise.all([
+        fetchRPC('synergy_getBlockNumber'),
+        fetchRPC('synergy_getLastBlockTime'),
+        fetchRPC('synergy_getTotalTxCount'),
+        fetchRPC('synergy_getAvgBlockTime'),
+        fetchRPC('synergy_getRecentActivity', [10])
+      ]);
+
+      setStats({
+        blockNumber,
+        lastBlockTime,
+        txCount,
+        avgBlockTime,
+        recentTxs
+      });
+    }
+    loadStats();
+  }, []);
 
   return (
     <Container maxW="7xl" py={8}>
       <Heading as="h1" mb={8}>Network Dashboard</Heading>
 
-      {/* Network Status Banner */}
-      <Card
-        bg="synergy.500"
-        color="white"
-        mb={8}
-        borderRadius="lg"
-        overflow="hidden"
-      >
+      <Card bg="synergy.500" color="white" mb={8} borderRadius="lg" overflow="hidden">
         <CardBody>
           <Flex justify="space-between" align="center">
             <HStack>
@@ -107,220 +123,54 @@ export default function DashboardPage() {
             </HStack>
             <HStack>
               <Text>Current Block:</Text>
-              <Text fontWeight="bold">{formatNumber(networkStats.blocks)}</Text>
+              <Text fontWeight="bold">{formatNumber(stats?.blockNumber)}</Text>
             </HStack>
           </Flex>
         </CardBody>
       </Card>
 
-      {/* Main Stats */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8}>
-        <StatCard
-          title="Blocks"
-          value={formatNumber(networkStats.blocks)}
-          helpText="Last block: 2 seconds ago"
-          icon={<Icon as={FaCubes} w={6} h={6} />}
-        />
-        <StatCard
-          title="Transactions"
-          value={formatNumber(networkStats.transactions)}
-          helpText="24h: +156,789"
-          icon={<Icon as={FaExchangeAlt} w={6} h={6} />}
-          change={true}
-          isIncrease={true}
-        />
-        <StatCard
-          title="Validators"
-          value={networkStats.validators}
-          helpText={`${networkStats.activeClusters} active clusters`}
-          icon={<Icon as={FaUsers} w={6} h={6} />}
-        />
-        <StatCard
-          title="Active Nodes"
-          value={formatNumber(networkStats.activeNodes)}
-          helpText="10% increase this week"
-          icon={<Icon as={FaServer} w={6} h={6} />}
-          change={true}
-          isIncrease={true}
-        />
-      </SimpleGrid>
+      {!stats ? (
+        <Flex justify="center" py={12}><Spinner size="xl" /></Flex>
+      ) : (
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8}>
+          <StatCard
+            title="Total Transactions"
+            value={formatNumber(stats.txCount)}
+            helpText={"Live Count"}
+            icon={<FaExchangeAlt />}
+          />
+          <StatCard
+            title="Average Block Time"
+            value={`${stats.avgBlockTime?.toFixed(2)}s`}
+            helpText={"Testnet Measurement"}
+            icon={<FaCubes />}
+          />
+          <StatCard
+            title="Block Height"
+            value={formatNumber(stats.blockNumber)}
+            icon={<FaServer />}
+          />
+          <StatCard
+            title="Time Since Last Block"
+            value={formatTimeAgo(stats.lastBlockTime)}
+            helpText={`@ ${stats.lastBlockTime}`}
+            icon={<FaClock />}
+          />
+        </SimpleGrid>
+      )}
 
-      {/* Performance Metrics */}
-      <Heading as="h2" size="lg" mb={4}>Performance Metrics</Heading>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mb={8}>
-        <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
-          <CardHeader pb={0}>
-            <Heading size="md">Block Time</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stat>
-              <StatNumber>{networkStats.blockTime} seconds</StatNumber>
-              <StatHelpText>
-                <StatArrow type="decrease" />
-                12% improvement
-              </StatHelpText>
-            </Stat>
-          </CardBody>
-        </Card>
-
-        <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
-          <CardHeader pb={0}>
-            <Heading size="md">Transactions Per Second</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stat>
-              <StatNumber>{networkStats.tps}</StatNumber>
-              <StatHelpText>
-                <StatArrow type="increase" />
-                8% increase
-              </StatHelpText>
-            </Stat>
-          </CardBody>
-        </Card>
-
-        <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
-          <CardHeader pb={0}>
-            <Heading size="md">Synergy Points</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stat>
-              <StatNumber>{formatNumber(networkStats.synPoints)}</StatNumber>
-              <StatHelpText>
-                Total network contribution score
-              </StatHelpText>
-            </Stat>
-          </CardBody>
-        </Card>
-      </SimpleGrid>
-
-      {/* Token Economics */}
-      <Heading as="h2" size="lg" mb={4}>Token Economics</Heading>
-      <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={6} mb={8}>
-        <GridItem colSpan={{ base: 1, md: 2 }}>
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
-            <CardHeader>
-              <Heading size="md">SYN Token Overview</Heading>
-            </CardHeader>
-            <CardBody>
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6}>
-                <Stat>
-                  <StatLabel>Current Price</StatLabel>
-                  <StatNumber>${networkStats.synPrice}</StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="increase" />
-                    {networkStats.priceChange}%
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>Market Cap</StatLabel>
-                  <StatNumber>${formatNumber(networkStats.marketCap)}</StatNumber>
-                  <StatHelpText>
-                    Based on circulating supply
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>Total Supply</StatLabel>
-                  <StatNumber>10,000,000,000 SYN</StatNumber>
-                  <StatHelpText>
-                    Fixed maximum supply
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>Total Staked</StatLabel>
-                  <StatNumber>{formatNumber(networkStats.totalStaked)} SYN</StatNumber>
-                  <StatHelpText>
-                    {(networkStats.totalStaked / 100000000).toFixed(1)}% of total supply
-                  </StatHelpText>
-                </Stat>
-              </SimpleGrid>
-            </CardBody>
-          </Card>
-        </GridItem>
-
-        <GridItem>
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" height="100%">
-            <CardHeader>
-              <Heading size="md">Validator Rewards (24h)</Heading>
-            </CardHeader>
-            <CardBody>
-              <Stat>
-                <StatNumber>125,000 SYN</StatNumber>
-                <StatHelpText>
-                  Distributed to 128 validators
-                </StatHelpText>
-              </Stat>
-              <Divider my={4} />
-              <Text>Average reward per validator: 976.5 SYN</Text>
-              <Text>Top validator reward: 2,345 SYN</Text>
-            </CardBody>
-          </Card>
-        </GridItem>
-
-        <GridItem>
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" height="100%">
-            <CardHeader>
-              <Heading size="md">Transaction Fees (24h)</Heading>
-            </CardHeader>
-            <CardBody>
-              <Stat>
-                <StatNumber>8,750 SYN</StatNumber>
-                <StatHelpText>
-                  From 156,789 transactions
-                </StatHelpText>
-              </Stat>
-              <Divider my={4} />
-              <Text>Burned: 2,625 SYN (30%)</Text>
-              <Text>Average fee: 0.056 SYN</Text>
-            </CardBody>
-          </Card>
-        </GridItem>
-      </Grid>
-
-      {/* Recent Activity */}
-      <Heading as="h2" size="lg" mb={4}>Recent Activity</Heading>
-      <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
-        <CardHeader>
-          <Heading size="md">Latest Events</Heading>
-        </CardHeader>
-        <CardBody>
-          <SimpleGrid columns={1} spacing={4}>
-            <Box p={3} borderWidth="1px" borderRadius="md" borderColor={borderColor}>
-              <Flex justify="space-between">
-                <Text fontWeight="bold">Validator Cluster Reshuffled</Text>
-                <Text color="gray.500">10 minutes ago</Text>
-              </Flex>
-              <Text mt={1}>Cluster #7 was reshuffled with 12 validators</Text>
-            </Box>
-
-            <Box p={3} borderWidth="1px" borderRadius="md" borderColor={borderColor}>
-              <Flex justify="space-between">
-                <Text fontWeight="bold">Large Transaction</Text>
-                <Text color="gray.500">32 minutes ago</Text>
-              </Flex>
-              <Text mt={1}>250,000 SYN transferred from Exchange to Validator Pool</Text>
-            </Box>
-
-            <Box p={3} borderWidth="1px" borderRadius="md" borderColor={borderColor}>
-              <Flex justify="space-between">
-                <Text fontWeight="bold">Governance Proposal Passed</Text>
-                <Text color="gray.500">2 hours ago</Text>
-              </Flex>
-              <Text mt={1}>Proposal #23: Adjust minimum validator stake requirement</Text>
-            </Box>
-
-            <Box p={3} borderWidth="1px" borderRadius="md" borderColor={borderColor}>
-              <Flex justify="space-between">
-                <Text fontWeight="bold">Network Upgrade</Text>
-                <Text color="gray.500">6 hours ago</Text>
-              </Flex>
-              <Text mt={1}>Protocol upgraded to version 1.2.5</Text>
-            </Box>
-          </SimpleGrid>
-        </CardBody>
-      </Card>
+      <Box>
+        <Heading size="md" mb={2}>Recent Activity</Heading>
+        <Box p={4} bg={cardBg} border="1px" borderColor={borderColor} borderRadius="md">
+          {stats?.recentTxs?.length > 0 ? (
+            stats.recentTxs.map((tx, idx) => (
+              <Text key={idx} mb={1} fontSize="sm">{JSON.stringify(tx)}</Text>
+            ))
+          ) : (
+            <Text>No activity yet.</Text>
+          )}
+        </Box>
+      </Box>
     </Container>
   );
 }
