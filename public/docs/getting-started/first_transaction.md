@@ -1,4 +1,4 @@
-**Document Title: Making Your First Transaction**
+**Making Your First Transaction**
 
 ---
 

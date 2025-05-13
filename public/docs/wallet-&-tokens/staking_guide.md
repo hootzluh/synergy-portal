@@ -1,4 +1,4 @@
-**Document Title: Staking Guide**
+**Staking Guide**
 
 ---
 

@@ -1,4 +1,4 @@
-**Document Title: Emergency Rollback and Parameter Changes**
+**Emergency Rollback and Parameter Changes**
 
 ---
 

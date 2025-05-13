@@ -1,4 +1,4 @@
-**Document Title: Smart Contract Development Guide**
+**Smart Contract Development Guide**
 
 ---
 

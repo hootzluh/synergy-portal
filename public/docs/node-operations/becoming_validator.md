@@ -1,4 +1,4 @@
-**Document Title: Becoming a Validator**
+**Becoming a Validator**
 
 ---
 

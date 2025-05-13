@@ -1,4 +1,4 @@
-**Document Title: Network Architecture Overview**
+**Network Architecture Overview**
 
 ---
 

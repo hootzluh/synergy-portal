@@ -1,4 +1,4 @@
-**Document Title: Using JSON-RPC Calls with cURL**
+**Using JSON-RPC Calls with cURL**
 
 ---
 

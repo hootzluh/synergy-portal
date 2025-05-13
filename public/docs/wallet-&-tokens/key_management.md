@@ -1,4 +1,4 @@
-**Document Title: Key Management**
+**Key Management**
 
 ---
 

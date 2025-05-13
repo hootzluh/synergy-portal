@@ -1,4 +1,4 @@
-**Document Title: Synergy Naming System (SNS)**
+**Synergy Naming System (SNS)**
 
 ---
 

@@ -1,4 +1,4 @@
-**Document Title: Creating a Wallet**
+**Creating a Wallet**
 
 ---
 

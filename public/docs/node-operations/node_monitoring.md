@@ -1,4 +1,4 @@
-**Document Title: Node Monitoring**
+**Node Monitoring**
 
 ---
 

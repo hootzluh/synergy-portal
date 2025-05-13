@@ -1,4 +1,4 @@
-**Document Title: Proposal System and Lifecycle**
+**Proposal System and Lifecycle**
 
 ---
 

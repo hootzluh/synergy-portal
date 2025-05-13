@@ -1,4 +1,4 @@
-**Document Title: Testing Frameworks and Example Contracts**
+**Testing Frameworks and Example Contracts**
 
 ---
 

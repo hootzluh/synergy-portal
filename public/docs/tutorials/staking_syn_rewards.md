@@ -1,4 +1,4 @@
-**Document Title: Staking SYN and Monitoring Rewards**
+**Staking SYN and Monitoring Rewards**
 
 ---
 

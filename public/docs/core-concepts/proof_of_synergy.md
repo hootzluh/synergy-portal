@@ -1,4 +1,4 @@
-**Document Title: Proof of Synergy (PoSy) Consensus**
+**Proof of Synergy (PoSy) Consensus**
 
 ---
 

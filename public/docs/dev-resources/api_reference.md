@@ -1,4 +1,4 @@
-**Document Title: API Reference (JSON-RPC + WebSocket)**
+**API Reference (JSON-RPC + WebSocket)**
 
 ---
 

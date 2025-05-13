@@ -1,4 +1,4 @@
-**Document Title: Governance Model Overview**
+**Governance Model Overview**
 
 ---
 

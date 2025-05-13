@@ -5,9 +5,9 @@ import {BrowserRouter} from "react-router-dom";
 import {WalletProvider} from "./services/walletContext";
 import theme from "./theme";
 import App from "./App";
-import "./index.css";
-import "./parallax.css";
-import "./glassmorphism.css";
+import "./styles/index.css";
+import "./styles/parallax.css";
+import "./styles/glassmorphism.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

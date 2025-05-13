@@ -1,4 +1,4 @@
-**Document Title: Creating an SNS Name and Mapping It**
+**Creating an SNS Name and Mapping It**
 
 ---
 

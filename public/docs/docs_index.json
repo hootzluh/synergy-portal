@@ -1,7 +1,7 @@
 {
-  "core-concepts": [
+  "Core-Concepts": [
     {
-      "title": "Post Quantum Crypto",
+      "title": "Post Quantum Cryptography",
       "slug": "post_quantum_crypto"
     },
     {
@@ -21,7 +21,7 @@
       "slug": "validator_clusters"
     }
   ],
-  "dev-resources": [
+  "Developer-Resources": [
     {
       "title": "Api Reference",
       "slug": "api_reference"
@@ -63,7 +63,7 @@
       "slug": "uma_resolution"
     }
   ],
-  "enterprise-security": [
+  "Enterprise-&-Security": [
     {
       "title": "Bridge Node Operations",
       "slug": "bridge_node_operations"
@@ -89,7 +89,7 @@
       "slug": "securit_risk_emergency_protocols"
     }
   ],
-  "getting-started": [
+  "Getting-Started": [
     {
       "title": "Creating Wallet",
       "slug": "creating_wallet"
@@ -111,7 +111,7 @@
       "slug": "obtaining_syn_tokens"
     }
   ],
-  "governance": [
+  "Governance": [
     {
       "title": "Dao Voting Analytics",
       "slug": "dao_voting_analytics"
@@ -141,7 +141,7 @@
       "slug": "voting_mechanism"
     }
   ],
-  "node-operations": [
+  "Node-Operations": [
     {
       "title": "Becoming Validator",
       "slug": "becoming_validator"
@@ -163,7 +163,7 @@
       "slug": "running_full_node"
     }
   ],
-  "testnet-resources": [
+  "Testnet-Resources": [
     {
       "title": "Api Test Scripts And Samples",
       "slug": "api_test_scripts_and_samples"
@@ -205,7 +205,7 @@
       "slug": "validator_setup_cli"
     }
   ],
-  "tutorials": [
+  "Tutorials": [
     {
       "title": "Claim Test Tokens",
       "slug": "claim_test_tokens"
@@ -247,7 +247,7 @@
       "slug": "vote_dao_proposal"
     }
   ],
-  "wallet-&-tokens": [
+  "Wallets-&-Tokens": [
     {
       "title": "Key Management",
       "slug": "key_management"
@@ -273,7 +273,7 @@
       "slug": "wallet_user_guide"
     }
   ],
-  "whitepapers": [
+  "Whitepapers": [
     {
       "title": "Address Format Specification",
       "slug": "address_format_specification"

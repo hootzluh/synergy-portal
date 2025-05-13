@@ -1,4 +1,4 @@
-**Document Title: Claiming Test Tokens from the Faucet**
+**Claiming Test Tokens from the Faucet**
 
 ---
 

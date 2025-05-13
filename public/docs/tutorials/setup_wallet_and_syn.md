@@ -1,4 +1,4 @@
-**Document Title: How to Set Up a Wallet and Obtain SYN Tokens**
+**How to Set Up a Wallet and Obtain SYN Tokens**
 
 ---
 

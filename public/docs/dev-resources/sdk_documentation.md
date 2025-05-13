@@ -1,4 +1,4 @@
-**Document Title: SDK Documentation**
+**SDK Documentation**
 
 ---
 

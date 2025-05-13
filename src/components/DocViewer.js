@@ -16,13 +16,13 @@ const DocViewer = ({ category, doc }) => {
         return res.text();
       })
       .then(setContent)
-      .catch(() => setContent('# 404\nDocument not found.'));
+      .catch(() => setContent('## 404\nDocument not found.'));
   }, [category, doc]);
 
   return (
-    <div className="doc-viewer">
+    <div className="doc-viewer fade-in">
       <ReactMarkdown>{content}</ReactMarkdown>
-      <div className="last-updated">Last updated: {lastUpdated}</div>
+      <div className="doc-updated">Last updated: {lastUpdated}</div>
     </div>
   );
 };

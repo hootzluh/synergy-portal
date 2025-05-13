@@ -7,14 +7,21 @@ body {
   background-color: #1a1a1a;
   color: #e5e5e5;
   font-family: 'Inter', sans-serif;
-  overflow: hidden;
+  overflow: auto;
+}
+
+/* === Page Layout === */
+.docs-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .docs-page-container {
   display: flex;
-  flex-direction: row;
-  height: 100%;
-  /* overflow: hidden; */
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* === Sidebar === */
@@ -22,10 +29,9 @@ body {
   width: 300px;
   background: #111827;
   padding: 20px;
+  border-right: 1px solid #2d2d2d;
   overflow-y: auto;
   overflow-x: hidden;
-  border-right: 1px solid #2d2d2d;
-  height: 100vh;
 }
 
 .sidebar-category {
@@ -57,6 +63,7 @@ body {
   display: block;
   padding: 4px 2px;
   word-break: break-word;
+  transition: color 0.2s ease;
 }
 
 .sidebar-category a.active-link {
@@ -97,17 +104,17 @@ body {
   background-color: #1d4ed8;
 }
 
-/* === Content Section === */
+/* === Main Content === */
 .docs-content-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  /* overflow: hidden; */
-  min-height: 0;
-  height: 100%;
+  overflow-y: auto;
+  background-color: #1a1a1a;
 }
 
+/* === Viewer === */
 .doc-viewer {
   flex: 1;
   overflow-y: auto;
@@ -116,6 +123,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
   color: #e5e5e5;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 .doc-updated {
@@ -124,7 +132,7 @@ body {
   color: #9ca3af;
 }
 
-/* === Markdown Content Styling === */
+/* === Markdown Styling === */
 .doc-viewer h1,
 .doc-viewer h2,
 .doc-viewer h3,
@@ -187,7 +195,7 @@ body {
   font-style: italic;
 }
 
-/* === Animation === */
+/* === Transitions === */
 .fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
@@ -206,53 +214,13 @@ body {
 
 /* === Footer === */
 footer {
-  position: fixed;
-  bottom: 0;
+  position: relative;
   width: 100%;
-  height: 80px;
-  padding: 0;
-  margin: 0;
+  padding: 1rem 2rem;
+  margin-top: auto;
   background: #0f0f0f;
-  text-align: center;
   color: #ccc;
+  text-align: center;
   font-size: 0.85rem;
   border-top: 1px solid #2d2d2d;
-}
-
-.docs-page-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.docs-page-container {
-  display: flex;
-  flex-grow: 1;
-  width: 100%;
-  /* overflow: hidden; */
-}
-
-.docs-sidebar {
-  width: 300px;
-  background: #111827;
-  padding: 20px;
-  border-right: 1px solid #2d2d2d;
-  overflow: auto;
-}
-
-.docs-content-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  overflow: auto;
-  background-color: #1a1a1a;
-  color: #e5e5e5;
-}
-
-/* Optional - ensure footer only appears at page end */
-footer {
-  position: relative;
-  margin-top: auto;
-  width: 100%;
 }

@@ -1,4 +1,4 @@
-**Document Title: Using the UMA to Create a Cross-Chain Address**
+**Using the UMA to Create a Cross-Chain Address**
 
 ---
 

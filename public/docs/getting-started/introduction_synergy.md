@@ -1,4 +1,4 @@
-**Document Title: Introduction to Synergy Network**
+**Introduction to Synergy Network**
 
 ---
 

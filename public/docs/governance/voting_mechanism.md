@@ -1,4 +1,4 @@
-**Document Title: Voting Mechanism (Quadratic + Synergy Score)**
+**Voting Mechanism (Quadratic + Synergy Score)**
 
 ---
 

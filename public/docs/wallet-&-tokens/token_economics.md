@@ -1,4 +1,4 @@
-**Document Title: Token Economics**
+**Token Economics**
 
 ---
 

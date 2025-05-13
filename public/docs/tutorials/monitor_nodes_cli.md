@@ -1,4 +1,4 @@
-**Document Title: Monitoring Nodes with the CLI**
+**Monitoring Nodes with the CLI**
 
 ---
 

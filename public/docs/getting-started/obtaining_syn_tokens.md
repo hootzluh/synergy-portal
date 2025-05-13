@@ -1,4 +1,4 @@
-**Document Title: Obtaining SYN Tokens**
+**Obtaining SYN Tokens**
 
 ---
 

@@ -1,4 +1,4 @@
-**Document Title: Testnet Deployment Guide**
+**Testnet Deployment Guide**
 
 ---
 

@@ -1,4 +1,4 @@
-**Document Title: Synergy Points System**
+**Synergy Points System**
 
 ---
 

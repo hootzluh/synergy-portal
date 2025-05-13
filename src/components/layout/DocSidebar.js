@@ -1,3 +1,5 @@
+// File: src/components/layout/DocSidebar.js
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/docs.css';
@@ -12,12 +14,12 @@ const DocSidebar = () => {
       .then((res) => res.json())
       .then((data) => {
         setDocsIndex(data);
-        // Automatically open all categories initially
-        const initialState = {};
-        Object.keys(data).forEach((cat) => {
-          initialState[cat] = true;
+        const firstOnlyOpen = {};
+        const keys = Object.keys(data);
+        keys.forEach((key, i) => {
+          firstOnlyOpen[key] = i === 0; // Only first category expanded
         });
-        setOpenSections(initialState);
+        setOpenSections(firstOnlyOpen);
       })
       .catch((err) => {
         console.error('Failed to load docs_index.json', err);
@@ -35,25 +37,22 @@ const DocSidebar = () => {
     <aside className="docs-sidebar">
       {Object.entries(docsIndex).map(([category, pages]) => (
         <div key={category} className="sidebar-category">
-          <div
-            className="sidebar-category-header"
-            onClick={() => toggleSection(category)}
-          >
+          <div className="sidebar-category-header" onClick={() => toggleSection(category)}>
             <strong>{category.replace(/-/g, ' ')}</strong>
             <span>{openSections[category] ? '−' : '+'}</span>
           </div>
           {openSections[category] && (
             <ul>
-              {pages.map(({ title, slug }) => (
-                <li key={slug}>
-                  <Link
-                    to={`/docs/${category}/${slug}`}
-                    className={location.pathname.includes(slug) ? 'active-link' : ''}
-                  >
-                    {title}
-                  </Link>
-                </li>
-              ))}
+              {pages.map(({ title, slug }) => {
+                const isActive = location.pathname.includes(`/${category}/${slug}`);
+                return (
+                  <li key={slug}>
+                    <Link to={`/docs/${category}/${slug}`} className={isActive ? 'active-link' : ''}>
+                      • {title}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

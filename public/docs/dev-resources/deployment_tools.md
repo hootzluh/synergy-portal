@@ -1,4 +1,4 @@
-**Document Title: Deployment Tools (CLI + GUI)**
+**Deployment Tools (CLI + GUI)**
 
 ---
 

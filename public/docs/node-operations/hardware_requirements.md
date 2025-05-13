@@ -1,4 +1,4 @@
-**Document Title: Hardware Requirements**
+**Hardware Requirements**
 
 ---
 

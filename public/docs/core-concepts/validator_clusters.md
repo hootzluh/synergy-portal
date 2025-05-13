@@ -1,4 +1,4 @@
-**Document Title: Validator Clusters**
+**Validator Clusters**
 
 ---
 

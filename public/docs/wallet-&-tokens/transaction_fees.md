@@ -1,4 +1,4 @@
-**Document Title: Transaction Fees**
+**Transaction Fees**
 
 ---
 

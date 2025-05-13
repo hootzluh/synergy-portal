@@ -1,4 +1,4 @@
-**Document Title: Creating and Managing a Validator Cluster**
+**Creating and Managing a Validator Cluster**
 
 ---
 

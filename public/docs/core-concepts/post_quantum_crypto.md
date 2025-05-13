@@ -1,4 +1,4 @@
-**Document Title: Post-Quantum Cryptography**
+**Post-Quantum Cryptography**
 
 ---
 

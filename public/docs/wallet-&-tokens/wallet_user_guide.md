@@ -1,4 +1,4 @@
-**Document Title: Wallet User Guide**
+**Wallet User Guide**
 
 ---
 

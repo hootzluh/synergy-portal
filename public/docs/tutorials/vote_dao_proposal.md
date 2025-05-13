@@ -1,4 +1,4 @@
-**Document Title: Voting on a DAO Proposal**
+**Voting on a DAO Proposal**
 
 ---
 

@@ -1,4 +1,4 @@
-**Document Title: Deploying a Smart Contract to Testnet**
+**Deploying a Smart Contract to Testnet**
 
 ---
 

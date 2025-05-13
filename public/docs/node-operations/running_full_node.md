@@ -1,4 +1,4 @@
-**Document Title: Running a Full Node**
+**Running a Full Node**
 
 ---
 
