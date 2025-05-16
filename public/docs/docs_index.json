@@ -1,94 +1,4 @@
 {
-  "Core-Concepts": [
-    {
-      "title": "Post Quantum Cryptography",
-      "slug": "post_quantum_crypto"
-    },
-    {
-      "title": "Proof Of Synergy",
-      "slug": "proof_of_synergy"
-    },
-    {
-      "title": "Synergy Naming System",
-      "slug": "synergy_naming_system"
-    },
-    {
-      "title": "Synergy Points System",
-      "slug": "synergy_points_system"
-    },
-    {
-      "title": "Validator Clusters",
-      "slug": "validator_clusters"
-    }
-  ],
-  "Developer-Resources": [
-    {
-      "title": "Api Reference",
-      "slug": "api_reference"
-    },
-    {
-      "title": "Api Sdk Integration",
-      "slug": "api_sdk_integration"
-    },
-    {
-      "title": "Deployment Tools",
-      "slug": "deployment_tools"
-    },
-    {
-      "title": "Interoperability Proof Validation",
-      "slug": "interoperability_proof_validation"
-    },
-    {
-      "title": "Sdk Documentation",
-      "slug": "sdk_documentation"
-    },
-    {
-      "title": "Smart Contract Guide",
-      "slug": "smart_contract_guide"
-    },
-    {
-      "title": "Smart Contract Testing",
-      "slug": "smart_contract_testing"
-    },
-    {
-      "title": "Sns Smart Contract Docs",
-      "slug": "sns_smart_contract_docs"
-    },
-    {
-      "title": "Testing Frameworks",
-      "slug": "testing_frameworks"
-    },
-    {
-      "title": "Uma Resolution",
-      "slug": "uma_resolution"
-    }
-  ],
-  "Enterprise-&-Security": [
-    {
-      "title": "Bridge Node Operations",
-      "slug": "bridge_node_operations"
-    },
-    {
-      "title": "Enterprise Integration Api",
-      "slug": "enterprise_integration_api"
-    },
-    {
-      "title": "Legal Disclaimer Risk Disclosures",
-      "slug": "legal_disclaimer_risk_disclosures"
-    },
-    {
-      "title": "Liquidity Provision Cross Swap",
-      "slug": "liquidity_provision_cross_swap"
-    },
-    {
-      "title": "Quantum Security Deep Dive",
-      "slug": "quantum_security_deep_dive"
-    },
-    {
-      "title": "Securit Risk Emergency Protocols",
-      "slug": "securit_risk_emergency_protocols"
-    }
-  ],
   "Getting-Started": [
     {
       "title": "Creating Wallet",
@@ -111,34 +21,52 @@
       "slug": "obtaining_syn_tokens"
     }
   ],
-  "Governance": [
+  "Core-Concepts": [
     {
-      "title": "Dao Voting Analytics",
-      "slug": "dao_voting_analytics"
+      "title": "Post Quantum Cryptography",
+      "slug": "post_quantum_crypto"
     },
     {
-      "title": "Emergency Rollback",
-      "slug": "emergency_rollback"
+      "title": "Proof Of Synergy",
+      "slug": "proof_of_synergy"
     },
     {
-      "title": "Governance Model",
-      "slug": "governance_model"
+      "title": "Synergy Naming System",
+      "slug": "synergy_naming_system"
     },
     {
-      "title": "Governance Stress Test",
-      "slug": "governance_stress_test"
+      "title": "Synergy Points System",
+      "slug": "synergy_points_system"
     },
     {
-      "title": "Proposal System",
-      "slug": "proposal_system"
+      "title": "Validator Clusters",
+      "slug": "validator_clusters"
+    }
+  ],
+  "Wallets-&-Tokens": [
+    {
+      "title": "Key Management",
+      "slug": "key_management"
     },
     {
-      "title": "Treasury Management",
-      "slug": "treasury_management"
+      "title": "Staking Guide",
+      "slug": "staking_guide"
     },
     {
-      "title": "Voting Mechanism",
-      "slug": "voting_mechanism"
+      "title": "Token Economics",
+      "slug": "token_economics"
+    },
+    {
+      "title": "Token Migration Guide",
+      "slug": "token_migration_guide"
+    },
+    {
+      "title": "Transaction Fees",
+      "slug": "transaction_fees"
+    },
+    {
+      "title": "Wallet User Guide",
+      "slug": "wallet_user_guide"
     }
   ],
   "Node-Operations": [
@@ -161,48 +89,6 @@
     {
       "title": "Running Full Node",
       "slug": "running_full_node"
-    }
-  ],
-  "Testnet-Resources": [
-    {
-      "title": "Api Test Scripts And Samples",
-      "slug": "api_test_scripts_and_samples"
-    },
-    {
-      "title": "Dev Rpc Endpoints",
-      "slug": "dev_rpc_endpoints"
-    },
-    {
-      "title": "Genesis Block Config",
-      "slug": "genesis_block_config"
-    },
-    {
-      "title": "Network Monitoring Dashboard Access",
-      "slug": "network_monitoring_dashboard_access"
-    },
-    {
-      "title": "Node Syncing Snapshot",
-      "slug": "node_syncing_snapshot"
-    },
-    {
-      "title": "Sample Testnet Transactions",
-      "slug": "sample_testnet_transactions"
-    },
-    {
-      "title": "Testnet Deployment Guide",
-      "slug": "testnet_deployment_guide"
-    },
-    {
-      "title": "Testnet Faucet Contract",
-      "slug": "testnet_faucet_contract"
-    },
-    {
-      "title": "Troubleshoot Testnet Deployment",
-      "slug": "troubleshoot_testnet_deployment"
-    },
-    {
-      "title": "Validator Setup Cli",
-      "slug": "validator_setup_cli"
     }
   ],
   "Tutorials": [
@@ -247,30 +133,112 @@
       "slug": "vote_dao_proposal"
     }
   ],
-  "Wallets-&-Tokens": [
+  "Governance": [
     {
-      "title": "Key Management",
-      "slug": "key_management"
+      "title": "Dao Voting Analytics",
+      "slug": "dao_voting_analytics"
     },
     {
-      "title": "Staking Guide",
-      "slug": "staking_guide"
+      "title": "Emergency Rollback",
+      "slug": "emergency_rollback"
     },
     {
-      "title": "Token Economics",
-      "slug": "token_economics"
+      "title": "Governance Model",
+      "slug": "governance_model"
     },
     {
-      "title": "Token Migration Guide",
-      "slug": "token_migration_guide"
+      "title": "Governance Stress Test",
+      "slug": "governance_stress_test"
     },
     {
-      "title": "Transaction Fees",
-      "slug": "transaction_fees"
+      "title": "Proposal System",
+      "slug": "proposal_system"
     },
     {
-      "title": "Wallet User Guide",
-      "slug": "wallet_user_guide"
+      "title": "Treasury Management",
+      "slug": "treasury_management"
+    },
+    {
+      "title": "Voting Mechanism",
+      "slug": "voting_mechanism"
+    }
+  ],
+  "Developer-Resources": [
+    {
+      "title": "Api Reference",
+      "slug": "api_reference"
+    },
+    {
+      "title": "Api Sdk Integration",
+      "slug": "api_sdk_integration"
+    },
+    {
+      "title": "Deployment Tools",
+      "slug": "deployment_tools"
+    },
+    {
+      "title": "Sdk Documentation",
+      "slug": "sdk_documentation"
+    },
+    {
+      "title": "Smart Contract Guide",
+      "slug": "smart_contract_guide"
+    },
+    {
+      "title": "Smart Contract Testing",
+      "slug": "smart_contract_testing"
+    },
+    {
+      "title": "Testing Frameworks",
+      "slug": "testing_frameworks"
+    }
+  ],
+  "Testnet-Resources": [
+    {
+      "title": "Api Test Scripts And Samples",
+      "slug": "api_test_scripts_and_samples"
+    },
+    {
+      "title": "Genesis Block Config",
+      "slug": "genesis_block_config"
+    },
+    {
+      "title": "Node Syncing Snapshot",
+      "slug": "node_syncing_snapshot"
+    },
+    {
+      "title": "Sample Testnet Transactions",
+      "slug": "sample_testnet_transactions"
+    },
+    {
+      "title": "Testnet Deployment Guide",
+      "slug": "testnet_deployment_guide"
+    },
+    {
+      "title": "Testnet Faucet Contract",
+      "slug": "testnet_faucet_contract"
+    },
+    {
+      "title": "Troubleshoot Testnet Deployment",
+      "slug": "troubleshoot_testnet_deployment"
+    }
+  ],
+  "Enterprise-&-Security": [
+    {
+      "title": "Bridge Node Operations",
+      "slug": "bridge_node_operations"
+    },
+    {
+      "title": "Enterprise Integration Api",
+      "slug": "enterprise_integration_api"
+    },
+    {
+      "title": "Liquidity Provision Cross Swap",
+      "slug": "liquidity_provision_cross_swap"
+    },
+    {
+      "title": "Quantum Security Deep Dive",
+      "slug": "quantum_security_deep_dive"
     }
   ],
   "Whitepapers": [
