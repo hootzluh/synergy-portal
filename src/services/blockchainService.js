@@ -40,17 +40,17 @@ export const initializeBlockchainService = async (network = 'testnet') => {
   try {
     currentNetwork = network;
     const rpcUrl = network === 'testnet' ? TESTNET_RPC_URL : MAINNET_RPC_URL;
-    
+
     // Initialize ethers provider
     provider = new ethers.JsonRpcProvider(rpcUrl);
-    
+
     // Initialize Web3
     web3 = new Web3(rpcUrl);
-    
+
     // Initialize token contract
     const tokenAddress = network === 'testnet' ? SYNERGY_TOKEN_ADDRESS_TESTNET : SYNERGY_TOKEN_ADDRESS_MAINNET;
     synergyTokenContract = new ethers.Contract(tokenAddress, SYNERGY_TOKEN_ABI, provider);
-    
+
     return true;
   } catch (error) {
     console.error('Failed to initialize blockchain service:', error);
@@ -68,19 +68,18 @@ export const getWalletBalance = async (address) => {
     if (!provider || !synergyTokenContract) {
       await initializeBlockchainService(currentNetwork);
     }
-    
+
     // Get native token balance (SYN)
     const balance = await provider.getBalance(address);
     const balanceInSyn = ethers.formatEther(balance);
-    
+
     // Get token balance if using a separate token contract
     const tokenBalance = await synergyTokenContract.balanceOf(address);
     const tokenBalanceInSyn = ethers.formatEther(tokenBalance);
-    
+
     // Get current SYN price from a price feed API
     let synPrice = 0.025; // Default fallback price
     try {
-      // Attempt to fetch real price data
       const response = await fetch('https://testnet-api.synergy.network/v1/price');
       if (response.ok) {
         const priceData = await response.json();
@@ -90,7 +89,7 @@ export const getWalletBalance = async (address) => {
       console.warn('Failed to fetch SYN price, using default:', error);
     }
     const usdValue = parseFloat(balanceInSyn) * synPrice;
-    
+
     return {
       address,
       balance: balanceInSyn,
@@ -115,27 +114,20 @@ export const getTransactionHistory = async (address, limit = 10) => {
     if (!provider) {
       await initializeBlockchainService(currentNetwork);
     }
-    
-    // Get transaction history from the blockchain
-    // Fetch transactions from the blockchain using the provider
+
     const network = currentNetwork === 'testnet' ? 'testnet' : 'mainnet';
     const blockNumber = await provider.getBlockNumber();
-    
-    // For demonstration, we'll fetch the last 10 blocks and look for transactions
+
     const transactions = [];
-    const maxBlocks = Math.min(blockNumber, 10); // Look at last 10 blocks max
-    
+    const maxBlocks = Math.min(blockNumber, 10);
+
     for (let i = 0; i < maxBlocks; i++) {
       const block = await provider.getBlock(blockNumber - i, true);
-      
       if (block && block.transactions) {
-        // Filter transactions related to this address
-        const relevantTxs = block.transactions.filter(tx => 
-          (tx.from && tx.from.toLowerCase() === address.toLowerCase()) || 
+        const relevantTxs = block.transactions.filter(tx =>
+          (tx.from && tx.from.toLowerCase() === address.toLowerCase()) ||
           (tx.to && tx.to.toLowerCase() === address.toLowerCase())
         );
-        
-        // Format transactions
         for (const tx of relevantTxs) {
           const isReceived = tx.to && tx.to.toLowerCase() === address.toLowerCase();
           const formattedTx = {
@@ -147,24 +139,16 @@ export const getTransactionHistory = async (address, limit = 10) => {
             status: 'Confirmed',
             hash: tx.hash
           };
-          
           transactions.push(formattedTx);
-          
-          // Limit to requested number of transactions
           if (transactions.length >= limit) {
             break;
           }
         }
       }
-      
-      // Break if we have enough transactions
       if (transactions.length >= limit) {
         break;
       }
     }
-    
-    // If we couldn't find any real transactions, create a sample transaction
-    // This helps during initial testing when there might not be any transactions yet
     if (transactions.length === 0) {
       transactions.push({
         type: 'Received',
@@ -176,7 +160,6 @@ export const getTransactionHistory = async (address, limit = 10) => {
         hash: '0x' + Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')
       });
     }
-    
     return transactions;
   } catch (error) {
     console.error('Failed to get transaction history:', error);
@@ -197,19 +180,10 @@ export const sendTransaction = async (from, to, amount, signer) => {
     if (!provider || !synergyTokenContract) {
       await initializeBlockchainService(currentNetwork);
     }
-    
-    // Create contract instance with signer
     const tokenWithSigner = synergyTokenContract.connect(signer);
-    
-    // Convert amount to wei
     const amountInWei = ethers.parseEther(amount);
-    
-    // Send transaction
     const tx = await tokenWithSigner.transfer(to, amountInWei);
-    
-    // Wait for transaction to be mined
     const receipt = await tx.wait();
-    
     return {
       success: true,
       hash: receipt.hash,
@@ -234,31 +208,20 @@ export const getStakingInfo = async (address) => {
     if (!provider || !synergyTokenContract) {
       await initializeBlockchainService(currentNetwork);
     }
-    
-    // Get staked balance
     const stakedBalance = await synergyTokenContract.getStakedBalance(address);
     const stakedBalanceInSyn = ethers.formatEther(stakedBalance);
-    
-    // Get reward rate
     const rewardRate = await synergyTokenContract.getRewardRate();
-    const annualRewardRate = parseFloat(ethers.formatEther(rewardRate)) * 100; // Convert to percentage
-    
-    // Calculate estimated rewards (simplified)
+    const annualRewardRate = parseFloat(ethers.formatEther(rewardRate)) * 100;
     const monthlyReward = (parseFloat(stakedBalanceInSyn) * annualRewardRate / 100) / 12;
-    
-    // Get total balance for percentage calculation
     const totalBalance = await synergyTokenContract.balanceOf(address);
     const totalBalanceInSyn = ethers.formatEther(totalBalance);
-    
-    // Calculate percentage of total balance that is staked
     const percentageStaked = parseFloat(stakedBalanceInSyn) / parseFloat(totalBalanceInSyn) * 100;
-    
     return {
       stakedBalance: stakedBalanceInSyn,
       percentageStaked: `${percentageStaked.toFixed(0)}%`,
       annualRewardRate: `${annualRewardRate.toFixed(2)}%`,
       estimatedMonthlyReward: monthlyReward.toFixed(2),
-      nextRewardTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // Mock: 24 hours from now
+      nextRewardTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
     };
   } catch (error) {
     console.error('Failed to get staking information:', error);
@@ -277,19 +240,10 @@ export const stakeTokens = async (amount, signer) => {
     if (!provider || !synergyTokenContract) {
       await initializeBlockchainService(currentNetwork);
     }
-    
-    // Create contract instance with signer
     const tokenWithSigner = synergyTokenContract.connect(signer);
-    
-    // Convert amount to wei
     const amountInWei = ethers.parseEther(amount);
-    
-    // Stake tokens
     const tx = await tokenWithSigner.stake(amountInWei);
-    
-    // Wait for transaction to be mined
     const receipt = await tx.wait();
-    
     return {
       success: true,
       hash: receipt.hash,
@@ -313,19 +267,10 @@ export const unstakeTokens = async (amount, signer) => {
     if (!provider || !synergyTokenContract) {
       await initializeBlockchainService(currentNetwork);
     }
-    
-    // Create contract instance with signer
     const tokenWithSigner = synergyTokenContract.connect(signer);
-    
-    // Convert amount to wei
     const amountInWei = ethers.parseEther(amount);
-    
-    // Unstake tokens
     const tx = await tokenWithSigner.unstake(amountInWei);
-    
-    // Wait for transaction to be mined
     const receipt = await tx.wait();
-    
     return {
       success: true,
       hash: receipt.hash,
@@ -338,12 +283,60 @@ export const unstakeTokens = async (amount, signer) => {
   }
 };
 
-export default {
-  initializeBlockchainService,
-  getWalletBalance,
-  getTransactionHistory,
-  sendTransaction,
-  getStakingInfo,
-  stakeTokens,
-  unstakeTokens
-};
+/**
+ * Fetch Synergy Score user data (mock or real API)
+ * @returns {Promise<Object>} - Synergy Score & dashboard data
+ */
+export async function fetchSynergyUserData() {
+  // TODO: Replace with actual API endpoint
+  // const response = await fetch('https://api.synergy.network/score/me', { headers: { Authorization: `Bearer ${token}` } });
+  // return await response.json();
+
+  // Mock data (remove when API ready)
+  return {
+    score: 1205,
+    percentile: 8,
+    progressToNextRank: 62,
+    nextRank: "Synergy Pro",
+    clusters: [
+      { name: "Validator Elite", synergy: 3500 },
+      { name: "Community X", synergy: 2100 },
+    ],
+    recentEvents: [
+      { id: 1, description: "Block Validated", points: 50, ts: "3h ago" },
+      { id: 2, description: "Helped Onboard User", points: 20, ts: "8h ago" },
+      { id: 3, description: "Bug Report Confirmed", points: 40, ts: "Yesterday" },
+      { id: 4, description: "Governance Vote", points: 15, ts: "2d ago" },
+    ],
+    growthTips: [
+      "Join a cluster activity this week (+50 pts)",
+      "Review PRs for wallet release (+100 pts)",
+      "Onboard 3 more users this month (+60 pts)",
+    ],
+    rewards: {
+      lastPayout: "42 SYN",
+      nextPayout: "May 20, 2025",
+      expected: "58 SYN",
+    },
+  };
+}
+
+/**
+ * Fetch leaderboard data (mock or real API)
+ * @returns {Promise<Array>} - Leaderboard array
+ */
+export async function fetchLeaderboard() {
+  // TODO: Replace with actual API endpoint
+  // const response = await fetch('https://api.synergy.network/score/leaderboard');
+  // return await response.json();
+
+  // Mock data (remove when API ready)
+  return [
+    { name: "Carol", score: 2500, cluster: "Validator Elite" },
+    { name: "Bob", score: 2170, cluster: "Community X" },
+    { name: "You", score: 1205, cluster: "Validator Elite" },
+    { name: "Alice", score: 990, cluster: "Open Helpers" },
+  ];
+}
+
+// No export default — use named exports throughout your app

@@ -25,15 +25,17 @@ import ThemeToggle from "../ThemeToggle";
 import WalletOptionsModal from "../WalletOptionsModal";
 
 const Links = [
-    {name: "Home", path: "/"},
-    {name: "ICO Pre-sale", path: "/ico-presale"},
-    {name: "Dashboard", path: "/dashboard"},
-    {name: "Explorer", path: "/explorer"},
-    {name: "Wallet", path: "/wallet"},
-    {name: "Gas Station", path: "/gas-station"},
-    {name: "Settings", path: "/settings"},
-    {name: "Docs", path: "/docs"},
+    { name: "Home", path: "/" },
+    { name: "ICO Pre-sale", path: "/ico-presale" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Synergy Score", path: "/synergy-score" },   // ← NEW!
+    { name: "Explorer", path: "/explorer" },
+    { name: "Wallet", path: "/wallet" },
+    { name: "Gas Station", path: "/gas-station" },
+    { name: "Settings", path: "/settings" },
+    { name: "Docs", path: "/docs" },
 ];
+
 
 const NavLink = ({children, path}) => {
   console.log("Rendering NavLink with children:", children);
@@ -60,12 +62,12 @@ export default function Navbar() {
     const [isWalletConnected, setIsWalletConnected] = React.useState(false);
     const { colorMode } = useColorMode();
     const logoSrc = colorMode === 'light' ? '/images/syn-l.png' : '/images/syn-d.png';
-    
+
     const handleConnectWallet = async () => {
         try {
             // Import the wallet service dynamically to avoid circular dependencies
             const { walletConnectorService } = await import('../../services/walletConnectorService');
-            
+
             // Check if MetaMask is installed
             if (!walletConnectorService.isMetaMaskInstalled()) {
                 // Show wallet options modal instead of just setting state
@@ -73,47 +75,47 @@ export default function Navbar() {
                 onOpenWalletOptions();
                 return;
             }
-            
+
             // Connect to MetaMask
             const account = await walletConnectorService.connectMetaMask();
-            
+
             // Check if connected to Synergy Network, if not, switch
             const isConnected = await walletConnectorService.isConnectedToSynergyNetwork('testnet');
             if (!isConnected) {
                 await walletConnectorService.switchToSynergyNetwork('testnet');
             }
-            
+
             setIsWalletConnected(true);
         } catch (error) {
             console.error('Error connecting wallet:', error);
             // Handle error appropriately
         }
     };
-    
+
     // State for wallet options modal
     const [isWalletOptionsOpen, setIsWalletOptionsOpen] = React.useState(false);
     const onOpenWalletOptions = () => setIsWalletOptionsOpen(true);
     const onCloseWalletOptions = () => setIsWalletOptionsOpen(false);
-    
+
     const toast = useToast();
-    
+
     const handleConnectExistingWallet = async () => {
         try {
             // Import the wallet service dynamically to avoid circular dependencies
             const { walletConnectorService } = await import('../../services/walletConnectorService');
-            
+
             // Connect to MetaMask
             const account = await walletConnectorService.connectMetaMask();
-            
+
             // Check if connected to Synergy Network, if not, switch
             const isConnected = await walletConnectorService.isConnectedToSynergyNetwork('testnet');
             if (!isConnected) {
                 await walletConnectorService.switchToSynergyNetwork('testnet');
             }
-            
+
             setIsWalletConnected(true);
             onCloseWalletOptions();
-            
+
             toast({
                 title: "Wallet connected",
                 description: "Your wallet has been connected successfully",
@@ -132,7 +134,7 @@ export default function Navbar() {
             });
         }
     };
-    
+
     const handleCreateNewWallet = () => {
         // Navigate to wallet creation page or show wallet creation modal
         toast({
@@ -142,11 +144,11 @@ export default function Navbar() {
             duration: 3000,
             isClosable: true,
         });
-        
+
         // In a real implementation, this would redirect to a wallet creation flow
         // For now, we'll just close the modal and show a message
         onCloseWalletOptions();
-        
+
         // Simulate wallet creation after a delay
         setTimeout(() => {
             setIsWalletConnected(true);
@@ -159,7 +161,7 @@ export default function Navbar() {
             });
         }, 2000);
     };
-    
+
     return (
         <Box className="glass-nav" px={4} boxShadow="sm">
             <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
@@ -201,7 +203,7 @@ export default function Navbar() {
                     <Box mr={3}>
                         <ThemeToggle />
                     </Box>
-                    
+
                     {isWalletConnected ? (
                         <Menu>
                             <MenuButton
@@ -253,10 +255,10 @@ export default function Navbar() {
                     </Stack>
                 </Box>
             ) : null}
-            
+
             {/* Wallet Options Modal */}
-            <WalletOptionsModal 
-                isOpen={isWalletOptionsOpen} 
+            <WalletOptionsModal
+                isOpen={isWalletOptionsOpen}
                 onClose={onCloseWalletOptions}
                 onConnectExisting={handleConnectExistingWallet}
                 onCreateNew={handleCreateNewWallet}

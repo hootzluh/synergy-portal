@@ -16,6 +16,8 @@ const DashboardPage = lazy(() => import("./components/pages/DashboardPage"));
 const DocsPage = lazy(() => import("./components/pages/DocsPage"));
 const SettingsPage = lazy(() => import("./components/pages/SettingsPage"));
 const GasStationPage = lazy(() => import("./components/pages/GasStationPage"));
+const SynergyScorePage = lazy(() => import("./components/pages/SynergyScorePage"));
+
 
 // Fallback component for lazy loading
 const PageLoadingFallback = () => (
@@ -50,7 +52,8 @@ function App() {
                         <Route path="/ico-presale" element={<IcoPresalePage />} />
                         <Route path="/explorer" element={<ExplorerPage />} />
                         <Route path="/wallet" element={<WalletPage />} />
-                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/dashboard" element={<DashboardPage />} />  {/* Your existing dashboard */}
+                        <Route path="/synergy-score" element={<SynergyScorePage />} />  {/* New Synergy Dashboard */}
                         <Route path="/docs" element={<DocsPage />} />
                         <Route path="/docs/:category/:slug" element={<DocsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
