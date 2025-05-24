@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex, HStack, Link, IconButton, useDisclosure, useColorModeValue, Image } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import ThemeToggle from '../ThemeToggle';
 import ConnectWalletButton from '../ConnectWalletButton';
@@ -32,7 +32,7 @@ const Navbar = () => {
       <Flex h={16} alignItems={'center'} justifyContent={'space-between'} px={4}>
         <IconButton
           size={'md'}
-          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          icon={isOpen ? <FaTimes /> : <FaBars />}
           aria-label={'Open Menu'}
           display={{ md: 'none' }}
           onClick={isOpen ? onClose : onOpen}
@@ -42,11 +42,11 @@ const Navbar = () => {
         <HStack spacing={8} alignItems={'center'}>
           <Box>
             <Link as={RouterLink} to="/">
-              <Image 
-                src="/logo.png" 
-                fallbackSrc="https://via.placeholder.com/120x40?text=SYNERGY" 
-                alt="Synergy Network" 
-                height="40px" 
+              <Image
+                src="/logo.png"
+                fallbackSrc="https://via.placeholder.com/120x40?text=SYNERGY"
+                alt="Synergy Network"
+                height="40px"
               />
             </Link>
           </Box>

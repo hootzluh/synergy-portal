@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex, Heading, Text, Button, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
-import { useWallet } from '../services/walletContext';
+import { useWallet } from '../../services/walletContext';
 
 // Blockchain service for wallet page
 const blockchainService = {
@@ -17,7 +17,7 @@ const blockchainService = {
       { id: 'arbitrum', name: 'Arbitrum', icon: '🔵' }
     ];
   },
-  
+
   // Get mock transaction history - in production this would call the actual API
   getTransactionHistory: async (address) => {
     // This would be replaced with actual API calls in production
@@ -30,13 +30,13 @@ const WalletPage = () => {
   const [networks, setNetworks] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const bgColor = useColorModeValue('rgba(255, 255, 255, 0.1)', 'rgba(0, 0, 0, 0.25)');
-  
+
   useEffect(() => {
     // Load supported networks
     setNetworks(blockchainService.getSupportedNetworks());
-    
+
     // Load transaction history if connected
     if (isConnected && walletAddress) {
       setIsLoading(true);
@@ -51,13 +51,13 @@ const WalletPage = () => {
         });
     }
   }, [isConnected, walletAddress]);
-  
+
   return (
     <Box p={4} maxW="1200px" mx="auto">
       <Heading as="h1" mb={6} fontWeight="black">
         Synergy Wallet
       </Heading>
-      
+
       {!isConnected ? (
         <Box className="glass-container" p={8} textAlign="center">
           <Heading as="h2" mb={4} fontWeight="bold">
@@ -66,7 +66,7 @@ const WalletPage = () => {
           <Text mb={6}>
             Connect your Synergy wallet to view your balance, transaction history, and manage your assets.
           </Text>
-          <Button 
+          <Button
             variant="connect-wallet"
             className="connect-wallet-btn blue-glow"
             size="lg"
@@ -101,17 +101,17 @@ const WalletPage = () => {
               </Box>
             </Flex>
           </Box>
-          
+
           <Box className="glass-container" mb={6}>
             <Heading as="h2" mb={4} fontWeight="bold">
               Supported Networks
             </Heading>
             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
               {networks.map(network => (
-                <Box 
-                  key={network.id} 
-                  className="glass-card blue-glow" 
-                  p={4} 
+                <Box
+                  key={network.id}
+                  className="glass-card blue-glow"
+                  p={4}
                   borderRadius="md"
                   textAlign="center"
                   cursor="pointer"
@@ -122,7 +122,7 @@ const WalletPage = () => {
               ))}
             </SimpleGrid>
           </Box>
-          
+
           <Box className="glass-container">
             <Heading as="h2" mb={4} fontWeight="bold">
               Transaction History
