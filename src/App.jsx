@@ -8,7 +8,7 @@ import Footer from "./components/layout/Footer";
 import LoadingScreen from "./components/LoadingScreen";
 
 // Lazy load page components for better performance
-const HomePage = lazy(() => import("./components/pages/HomePage"));
+const HomePage = lazy(() => import("./components/pages/HomePage.jsx"));
 const IcoPresalePage = lazy(() => import("./components/pages/IcoPresalePage"));
 const ExplorerPage = lazy(() => import("./components/pages/ExplorerPage"));
 const WalletPage = lazy(() => import("./components/pages/WalletPage"));

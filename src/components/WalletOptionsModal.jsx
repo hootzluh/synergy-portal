@@ -4,13 +4,13 @@ import { Box, VStack, Text, Button, Image, useColorModeValue, Spinner } from '@c
 const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalletConnect, isConnecting }) => {
   const bgColor = useColorModeValue('rgba(255, 255, 255, 0.1)', 'rgba(0, 0, 0, 0.25)');
   const borderColor = useColorModeValue('rgba(255, 255, 255, 0.18)', 'rgba(255, 255, 255, 0.08)');
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <Box
       position="fixed"
-      top="0"
+      top="550px"
       left="0"
       right="0"
       bottom="0"
@@ -36,7 +36,7 @@ const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalle
           <Text fontSize="xl" fontWeight="bold" textAlign="center">
             Connect Your Wallet
           </Text>
-          
+
           <Button
             variant="glass"
             className="blue-glow"
@@ -45,11 +45,11 @@ const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalle
             justifyContent="flex-start"
             isDisabled={isConnecting}
           >
-            <Image 
-              src="/synergy-wallet-icon.png" 
-              fallbackSrc="https://via.placeholder.com/30?text=SW" 
-              boxSize="30px" 
-              mr={3} 
+            <Image
+              src="/synergy-wallet-icon.png"
+              fallbackSrc="https://via.placeholder.com/30?text=SW"
+              boxSize="30px"
+              mr={3}
               alt="Synergy Wallet"
             />
             <VStack align="start" spacing={0} flex="1">
@@ -58,7 +58,7 @@ const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalle
             </VStack>
             {isConnecting && <Spinner size="sm" ml={2} />}
           </Button>
-          
+
           <Button
             variant="glass"
             className="blue-glow"
@@ -67,11 +67,11 @@ const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalle
             justifyContent="flex-start"
             isDisabled={isConnecting}
           >
-            <Image 
-              src="/walletconnect-icon.png" 
-              fallbackSrc="https://via.placeholder.com/30?text=WC" 
-              boxSize="30px" 
-              mr={3} 
+            <Image
+              src="/walletconnect-icon.png"
+              fallbackSrc="https://via.placeholder.com/30?text=WC"
+              boxSize="30px"
+              mr={3}
               alt="WalletConnect"
             />
             <VStack align="start" spacing={0} flex="1">
@@ -80,7 +80,7 @@ const WalletOptionsModal = ({ isOpen, onClose, onConnectInjected, onConnectWalle
             </VStack>
             {isConnecting && <Spinner size="sm" ml={2} />}
           </Button>
-          
+
           <Text fontSize="xs" textAlign="center" opacity={0.7} mt={2}>
             By connecting your wallet, you agree to the Terms of Service and Privacy Policy
           </Text>

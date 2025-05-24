@@ -9,9 +9,9 @@ const HomePage = () => {
       <Box className="glass-container" mb={8}>
         <Flex align="center" mb={6}>
           <Image src={colorMode === 'light' ? "/images/syn-l.png" : "/images/syn-d.png"} alt="Synergy Network" height="80px" mr={4} />
-          <Heading 
-            as="h1" 
-            size="2xl" 
+          <Heading
+            as="h1"
+            size="2xl"
             bgGradient="linear(to-r, #1399FF, #0500A3)"
             bgClip="text"
           >
@@ -21,8 +21,8 @@ const HomePage = () => {
         <Text fontSize="xl" mb={6}>
           The next generation blockchain platform for decentralized applications and digital assets.
         </Text>
-        <Button 
-          size="lg" 
+        <Button
+          size="lg"
           className="glass-button glow-effect"
           bgGradient="linear(to-r, #1399FF, #0500A3)"
           color="white"
@@ -34,9 +34,9 @@ const HomePage = () => {
         >
           Get Started
         </Button>
-        <Button 
-          size="lg" 
-          variant="outline" 
+        <Button
+          size="lg"
+          variant="outline"
           className="glass-button"
           borderColor="#1399FF"
           color={colorMode === 'dark' ? '#1399FF' : '#0500A3'}
@@ -54,7 +54,7 @@ const HomePage = () => {
             Process thousands of transactions per second with minimal fees and instant finality.
           </Text>
         </Box>
-        
+
         <Box className="glass-container glass-card">
           <Heading as="h3" size="lg" mb={4} color={colorMode === 'dark' ? '#1399FF' : '#0500A3'}>
             Secure & Reliable
@@ -63,7 +63,7 @@ const HomePage = () => {
             Built on proven consensus mechanisms with enterprise-grade security features.
           </Text>
         </Box>
-        
+
         <Box className="glass-container glass-card">
           <Heading as="h3" size="lg" mb={4} color={colorMode === 'dark' ? '#1399FF' : '#0500A3'}>
             Developer Friendly
