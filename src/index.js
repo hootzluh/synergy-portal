@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
 import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { WalletProvider } from './services/walletContext';
@@ -30,4 +31,7 @@ const Root = () => {
   );
 };
 
-export default Root;
+// Render the Root component to the DOM
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<Root />);
