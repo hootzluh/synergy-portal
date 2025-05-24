@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+
+// Import our SASS modules
+@import 'variables';
+@import 'glassmorphism';
+
+// Theme system
+:root {
+  // Default dark theme variables
+  --bg-color: #{$dark-bg};
+  --surface-color: #{$dark-surface};
+  --text-color: #{$dark-text};
+  --text-secondary-color: #{$dark-text-secondary};
+  --border-color: #{$dark-border};
+  
+  // Common variables
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --tertiary-color: #{$tertiary-color};
+  --accent-color: #{$accent-color};
+  
+  // Transition
+  --transition-speed: #{$transition-speed};
+  --transition-timing: #{$transition-timing};
+}
+
+// Light theme class
+.light-theme {
+  --bg-color: #{$light-bg};
+  --surface-color: #{$light-surface};
+  --text-color: #{$light-text};
+  --text-secondary-color: #{$light-text-secondary};
+  --border-color: #{$light-border};
+}
+
+// Global styles
+body {
+  font-family: $font-primary;
+  color: var(--text-color);
+  background: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color $transition-speed $transition-timing;
+  @include custom-scrollbar;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  margin-top: 0;
+}
+
+h1 {
+  font-weight: $font-weight-black; // Inter Black for titles
+}
+
+h2, h3 {
+  font-weight: $font-weight-bold; // Inter Bold for section headings
+}
+
+h4, h5, h6 {
+  font-weight: $font-weight-medium; // Inter Medium for subsection headings
+}
+
+p, ul, ol {
+  font-weight: $font-weight-regular; // Inter Regular for body text
+}
+
+// Background gradient
+.gradient-bg {
+  @include background-gradient;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $z-index-background;
+}
+
+// Glassmorphism components
+.glass {
+  @include glass-dark;
+  
+  .light-theme & {
+    @include glass-light;
+  }
+}
+
+.glass-card {
+  @include glass-dark;
+  @include glass-card;
+  
+  .light-theme & {
+    @include glass-light;
+  }
+}
+
+.glass-button {
+  @include glass-button;
+  color: var(--text-color);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: $font-weight-medium;
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.glass-nav {
+  @include glass-nav;
+  
+  .light-theme & {
+    background: rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+.glass-footer {
+  @include glass-footer;
+  
+  .light-theme & {
+    background: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+.glass-container {
+  @include glass-container;
+  
+  .light-theme & {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Glow effects
+.blue-glow {
+  @include blue-glow;
+}
+
+// Interactive elements
+button, 
+a, 
+.interactive {
+  transition: all $transition-speed $transition-timing;
+  
+  &:hover, &:focus {
+    @include blue-glow;
+  }
+}
+
+// Page transitions
+@include page-transition;
+
+// Responsive utilities
+@media (max-width: $breakpoint-md) {
+  .glass-container {
+    padding: 16px;
+  }
+}
+
+// Connect wallet button specific styling
+.connect-wallet-btn {
+  @include glass-button;
+  @include blue-glow;
+  background: rgba($primary-color, 0.3);
+  color: var(--text-color);
+  font-weight: $font-weight-bold;
+  padding: 10px 20px;
+  border-radius: $border-radius-md;
+  
+  &:hover, &:focus, &:active {
+    background: rgba($primary-color, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  &.connected {
+    background: rgba($secondary-color, 0.3);
+    
+    &:hover, &:focus, &:active {
+      background: rgba($secondary-color, 0.5);
+    }
+  }
+}
+
+// Wallet address display
+.wallet-address {
+  font-family: $font-primary;
+  font-weight: $font-weight-medium;
+  background: rgba($primary-color, 0.1);
+  padding: 6px 12px;
+  border-radius: $border-radius-sm;
+  border: 1px solid rgba($primary-color, 0.2);
+  
+  .light-theme & {
+    background: rgba($primary-color, 0.05);
+  }
+}
+
+// Theme toggle
+.theme-toggle {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-speed $transition-timing;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    @include blue-glow;
+  }
+  
+  .light-theme & {
+    background: rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

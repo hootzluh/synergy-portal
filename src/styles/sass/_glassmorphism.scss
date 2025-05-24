@@ -1,0 +1,173 @@
+// Glassmorphism Mixins
+@import 'variables';
+
+// Base glassmorphism mixin
+@mixin glassmorphism($bg-opacity, $border-opacity, $blur, $shadow-opacity) {
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border-radius: $border-radius-md;
+  transition: all $transition-speed $transition-timing;
+}
+
+// Dark theme glassmorphism
+@mixin glass-dark {
+  @include glassmorphism($glass-opacity-dark, $glass-border-opacity-dark, $glass-blur, $glass-shadow-opacity);
+  background: rgba(0, 0, 0, $glass-opacity-dark);
+  border: 1px solid rgba(255, 255, 255, $glass-border-opacity-dark);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, $glass-shadow-opacity);
+}
+
+// Light theme glassmorphism
+@mixin glass-light {
+  @include glassmorphism($glass-opacity-light, $glass-border-opacity-light, $glass-blur, $glass-shadow-opacity);
+  background: rgba(255, 255, 255, $glass-opacity-light);
+  border: 1px solid rgba(255, 255, 255, $glass-border-opacity-light);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, $glass-shadow-opacity * 0.7);
+}
+
+// Glassmorphism card with hover effect
+@mixin glass-card {
+  transition: all $transition-speed $transition-timing;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, $glass-shadow-opacity * 1.3);
+  }
+}
+
+// Glassmorphism button
+@mixin glass-button {
+  background: rgba($primary-color, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: $border-radius-sm;
+  border: 1px solid rgba($primary-color, 0.3);
+  transition: all $transition-speed $transition-timing;
+  
+  &:hover {
+    background: rgba($primary-color, 0.3);
+    border: 1px solid rgba($primary-color, 0.5);
+  }
+}
+
+// Glassmorphism navigation
+@mixin glass-nav {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur($glass-blur);
+  -webkit-backdrop-filter: blur($glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Glassmorphism footer
+@mixin glass-footer {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur($glass-blur);
+  -webkit-backdrop-filter: blur($glass-blur);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Glassmorphism container
+@mixin glass-container {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: all $transition-speed $transition-timing;
+  
+  &:hover {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Electric blue glow effect
+@mixin blue-glow {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: $primary-color;
+    border-radius: $border-radius-md;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity $transition-speed $transition-timing;
+  }
+  
+  &:hover::after, &:focus::after, &:active::after {
+    opacity: 0.5;
+    filter: blur(15px);
+  }
+}
+
+// Scrollbar styling
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba($primary-color, 0.5);
+    border-radius: 5px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($primary-color, 0.7);
+  }
+}
+
+// Background gradient
+@mixin background-gradient {
+  background: linear-gradient(135deg, $gradient-start, $gradient-mid1, $gradient-mid2, $gradient-end);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Page transition animations
+@mixin page-transition {
+  .page-enter {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .page-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .page-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+  }
+}

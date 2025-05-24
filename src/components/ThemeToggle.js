@@ -1,24 +1,34 @@
-import React from 'react';
-import { useColorMode, IconButton, Tooltip } from '@chakra-ui/react';
-import { FaSun, FaMoon } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { Box, IconButton, useColorMode } from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 
 const ThemeToggle = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  
+  const [mounted, setMounted] = useState(false);
+
+  // After mounting, we can show the appropriate icon
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Update document class for global theme styling
+  useEffect(() => {
+    if (mounted) {
+      document.documentElement.classList.toggle('light-theme', colorMode === 'light');
+    }
+  }, [colorMode, mounted]);
+
   return (
-    <Tooltip label={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+    <Box className="theme-toggle-wrapper">
       <IconButton
-        aria-label="Toggle theme"
-        icon={colorMode === 'dark' ? <FaSun /> : <FaMoon />}
+        aria-label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+        icon={mounted && (colorMode === 'light' ? <MoonIcon /> : <SunIcon />)}
         onClick={toggleColorMode}
         variant="ghost"
-        color={colorMode === 'dark' ? '#1399FF' : '#0500A3'}
-        _hover={{
-          bg: colorMode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.200',
-        }}
+        className="theme-toggle"
         size="md"
       />
-    </Tooltip>
+    </Box>
   );
 };
 

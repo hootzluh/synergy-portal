@@ -1,293 +1,276 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { ethers } from 'ethers';
-import blockchainService from '../services/blockchainService';
-import walletConnectorService from '../services/walletConnectorService';
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { useToast } from '@chakra-ui/react';
 
-// Create context
+// Create wallet context
 const WalletContext = createContext();
 
-// Provider component
+// Validate Synergy address format
+const isSynergyAddress = (addr) => {
+  return /^sYn[QU]1[ac-hj-np-z02-9]{30,42}$/.test(addr);
+};
+
+// Format address for display
+const formatAddress = (address) => {
+  if (!address) return '';
+  return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+};
+
 export const WalletProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [walletAddress, setWalletAddress] = useState('');
+  const [snsName, setSnsName] = useState('');
   const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
-  const [walletData, setWalletData] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-  const [stakingInfo, setStakingInfo] = useState(null);
-  const [network, setNetwork] = useState('testnet'); // Default to testnet as per requirements
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [providerType, setProviderType] = useState(null); // 'injected' or 'walletconnect'
+  const [isConnecting, setIsConnecting] = useState(false);
+  const toast = useToast();
 
-  // Initialize blockchain service
+  // Check if Synergy wallet is available
+  const isSynergyWalletAvailable = () => {
+    return typeof window !== 'undefined' && window.synergy !== undefined;
+  };
+
+  // Initialize wallet connection on page load
   useEffect(() => {
-    const init = async () => {
-      try {
-        await blockchainService.initializeBlockchainService(network);
-      } catch (error) {
-        console.error('Failed to initialize blockchain service:', error);
-        setError('Failed to initialize blockchain connection');
+    const checkExistingConnection = async () => {
+      // Check for existing connection in localStorage
+      const savedWallet = localStorage.getItem('synergy_wallet_connection');
+      
+      if (savedWallet) {
+        try {
+          const walletData = JSON.parse(savedWallet);
+          
+          if (walletData.connected && walletData.address) {
+            // Verify the wallet is still connected
+            if (isSynergyWalletAvailable()) {
+              try {
+                const accounts = await window.synergy.request({ method: 'synergy_getAccounts' });
+                
+                if (accounts && accounts.length > 0 && accounts.includes(walletData.address)) {
+                  setWalletAddress(walletData.address);
+                  setSnsName(walletData.snsName || '');
+                  setIsConnected(true);
+                  setProvider(window.synergy);
+                  setProviderType('injected');
+                } else {
+                  // Wallet no longer connected, clear saved data
+                  localStorage.removeItem('synergy_wallet_connection');
+                }
+              } catch (error) {
+                console.error('Error checking existing connection:', error);
+                localStorage.removeItem('synergy_wallet_connection');
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing saved wallet data:', error);
+          localStorage.removeItem('synergy_wallet_connection');
+        }
       }
     };
     
-    init();
-  }, [network]);
+    checkExistingConnection();
+  }, []);
 
-  // Connect wallet
-  const connectWallet = async () => {
-    setIsLoading(true);
-    setError(null);
+  // Save connection to localStorage when connected
+  useEffect(() => {
+    if (isConnected && walletAddress) {
+      localStorage.setItem('synergy_wallet_connection', JSON.stringify({
+        connected: true,
+        address: walletAddress,
+        snsName: snsName || '',
+        providerType
+      }));
+    }
+  }, [isConnected, walletAddress, snsName, providerType]);
+
+  // Connect using injected provider
+  const connectWithInjectedProvider = async () => {
+    setIsConnecting(true);
     
     try {
-      // Check if MetaMask is installed
-      if (!walletConnectorService.isMetaMaskInstalled()) {
-        throw new Error('MetaMask is not installed. Please install MetaMask to use this feature.');
+      if (isSynergyWalletAvailable()) {
+        const accounts = await window.synergy.request({ method: 'synergy_requestAccounts' });
+        
+        if (accounts && accounts.length > 0) {
+          const address = accounts[0];
+          
+          // Validate address format
+          if (isSynergyAddress(address)) {
+            setWalletAddress(address);
+            setIsConnected(true);
+            setProvider(window.synergy);
+            setProviderType('injected');
+            
+            // Try to get SNS name if available
+            try {
+              const snsResult = await window.synergy.request({ 
+                method: 'synergy_resolveSNS',
+                params: [address] 
+              });
+              
+              if (snsResult && snsResult.name) {
+                setSnsName(snsResult.name);
+              }
+            } catch (snsError) {
+              console.error('Error fetching SNS name:', snsError);
+            }
+            
+            toast({
+              title: 'Wallet Connected',
+              description: 'Your Synergy wallet has been connected successfully.',
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            });
+            
+            return true;
+          } else {
+            throw new Error('Invalid Synergy address format');
+          }
+        }
+      } else {
+        throw new Error('Synergy wallet not detected');
       }
-      
-      // Ensure we're connected to the correct network
-      const isCorrectNetwork = await walletConnectorService.isConnectedToSynergyNetwork(network);
-      if (!isCorrectNetwork) {
-        // Switch to the correct network
-        await walletConnectorService.switchToSynergyNetwork(network);
-      }
-      
-      // Connect to MetaMask
-      const account = await walletConnectorService.connectMetaMask();
-      
-      // Get signer
-      const signer = await walletConnectorService.getSigner();
-      
-      // Create ethers provider
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      
-      // Set state
-      setAccount(account);
-      setProvider(provider);
-      setSigner(signer);
-      setIsConnected(true);
-      
-      // Fetch wallet data
-      await fetchWalletData(account);
-      
-      // Listen for account changes
-      walletConnectorService.onAccountsChanged(handleAccountsChanged);
-      
-      // Listen for chain changes
-      walletConnectorService.onChainChanged(handleChainChanged);
-      
-      return true;
     } catch (error) {
-      console.error('Failed to connect wallet:', error);
-      setError(error.message || 'Failed to connect wallet');
+      console.error('Error connecting wallet:', error);
+      toast({
+        title: 'Connection Failed',
+        description: error.message || 'Failed to connect wallet. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
       return false;
     } finally {
-      setIsLoading(false);
+      setIsConnecting(false);
+    }
+  };
+
+  // Connect with WalletConnect
+  const connectWithWalletConnect = async () => {
+    setIsConnecting(true);
+    
+    try {
+      // This would be implemented with WalletConnect v2 client
+      toast({
+        title: 'WalletConnect',
+        description: 'WalletConnect integration coming soon.',
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    } catch (error) {
+      console.error('Error connecting with WalletConnect:', error);
+      toast({
+        title: 'Connection Failed',
+        description: error.message || 'Failed to connect with WalletConnect. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    } finally {
+      setIsConnecting(false);
     }
   };
 
   // Disconnect wallet
   const disconnectWallet = () => {
-    // Remove event listeners
-    if (walletConnectorService.isMetaMaskInstalled()) {
-      walletConnectorService.removeListener('accountsChanged', handleAccountsChanged);
-      walletConnectorService.removeListener('chainChanged', handleChainChanged);
-    }
-    
-    // Reset state
     setIsConnected(false);
-    setAccount(null);
+    setWalletAddress('');
+    setSnsName('');
     setProvider(null);
-    setSigner(null);
-    setWalletData(null);
-    setTransactions([]);
-    setStakingInfo(null);
+    setProviderType(null);
     
-    return true;
+    // Remove from localStorage
+    localStorage.removeItem('synergy_wallet_connection');
+    
+    toast({
+      title: 'Wallet Disconnected',
+      description: 'Your wallet has been disconnected.',
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
-  // Handle account changes
-  const handleAccountsChanged = async (accounts) => {
-    if (accounts.length === 0) {
-      // User disconnected their wallet
-      disconnectWallet();
-    } else if (accounts[0] !== account) {
-      // User switched accounts
-      setAccount(accounts[0]);
-      await fetchWalletData(accounts[0]);
+  // Sign a message with the connected wallet
+  const signMessage = async (message) => {
+    if (!isConnected || !provider) {
+      toast({
+        title: 'Wallet Not Connected',
+        description: 'Please connect your wallet to sign messages.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return null;
     }
-  };
-
-  // Handle chain changes
-  const handleChainChanged = () => {
-    // Reload the page when the chain changes
-    window.location.reload();
-  };
-
-  // Fetch wallet data
-  const fetchWalletData = async (address) => {
-    setIsLoading(true);
-    setError(null);
     
     try {
-      // Get wallet balance
-      const balanceData = await blockchainService.getWalletBalance(address);
-      setWalletData(balanceData);
+      const signature = await provider.request({
+        method: 'synergy_signMessage',
+        params: [walletAddress, message]
+      });
       
-      // Get transaction history
-      const txHistory = await blockchainService.getTransactionHistory(address);
-      setTransactions(txHistory);
-      
-      // Get staking info
-      const staking = await blockchainService.getStakingInfo(address);
-      setStakingInfo(staking);
-      
-      return true;
+      return signature;
     } catch (error) {
-      console.error('Failed to fetch wallet data:', error);
-      setError('Failed to fetch wallet data');
-      return false;
-    } finally {
-      setIsLoading(false);
+      console.error('Error signing message:', error);
+      toast({
+        title: 'Signing Failed',
+        description: error.message || 'Failed to sign message. Please try again.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return null;
     }
   };
 
-  // Send transaction
-  const sendTransaction = async (to, amount) => {
-    setIsLoading(true);
-    setError(null);
+  // Get wallet balance
+  const getBalance = async () => {
+    if (!isConnected || !provider) {
+      return null;
+    }
     
     try {
-      if (!isConnected || !signer) {
-        throw new Error('Wallet not connected');
-      }
+      const balance = await provider.request({
+        method: 'synergy_getBalance',
+        params: [walletAddress, 'latest']
+      });
       
-      const result = await blockchainService.sendTransaction(account, to, amount, signer);
-      
-      // Refresh wallet data
-      await fetchWalletData(account);
-      
-      return result;
+      return balance;
     } catch (error) {
-      console.error('Failed to send transaction:', error);
-      setError(error.message || 'Failed to send transaction');
-      throw error;
-    } finally {
-      setIsLoading(false);
+      console.error('Error getting balance:', error);
+      return null;
     }
-  };
-
-  // Stake tokens
-  const stakeTokens = async (amount) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      if (!isConnected || !signer) {
-        throw new Error('Wallet not connected');
-      }
-      
-      const result = await blockchainService.stakeTokens(amount, signer);
-      
-      // Refresh wallet data
-      await fetchWalletData(account);
-      
-      return result;
-    } catch (error) {
-      console.error('Failed to stake tokens:', error);
-      setError(error.message || 'Failed to stake tokens');
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Unstake tokens
-  const unstakeTokens = async (amount) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      if (!isConnected || !signer) {
-        throw new Error('Wallet not connected');
-      }
-      
-      const result = await blockchainService.unstakeTokens(amount, signer);
-      
-      // Refresh wallet data
-      await fetchWalletData(account);
-      
-      return result;
-    } catch (error) {
-      console.error('Failed to unstake tokens:', error);
-      setError(error.message || 'Failed to unstake tokens');
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Switch network
-  const switchNetwork = async (newNetwork) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      // Update network state
-      setNetwork(newNetwork);
-      
-      // Reinitialize blockchain service with new network
-      await blockchainService.initializeBlockchainService(newNetwork);
-      
-      // Refresh wallet data if connected
-      if (isConnected && account) {
-        await fetchWalletData(account);
-      }
-      
-      return true;
-    } catch (error) {
-      console.error('Failed to switch network:', error);
-      setError('Failed to switch network');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Context value
-  const value = {
-    isConnected,
-    account,
-    provider,
-    signer,
-    walletData,
-    transactions,
-    stakingInfo,
-    network,
-    isLoading,
-    error,
-    connectWallet,
-    disconnectWallet,
-    sendTransaction,
-    stakeTokens,
-    unstakeTokens,
-    switchNetwork,
-    refreshWalletData: () => account && fetchWalletData(account)
   };
 
   return (
-    <WalletContext.Provider value={value}>
+    <WalletContext.Provider
+      value={{
+        isConnected,
+        walletAddress,
+        snsName,
+        provider,
+        providerType,
+        isConnecting,
+        formatAddress,
+        isSynergyAddress,
+        connectWithInjectedProvider,
+        connectWithWalletConnect,
+        disconnectWallet,
+        signMessage,
+        getBalance
+      }}
+    >
       {children}
     </WalletContext.Provider>
   );
 };
 
-// Custom hook to use the wallet context
-export const useWallet = () => {
-  const context = useContext(WalletContext);
-  if (context === undefined) {
-    throw new Error('useWallet must be used within a WalletProvider');
-  }
-  return context;
-};
+// Custom hook to use wallet context
+export const useWallet = () => useContext(WalletContext);
 
 export default WalletContext;

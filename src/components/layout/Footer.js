@@ -1,49 +1,42 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  Stack,
-  Text,
-  Link,
-  Flex,
-  Divider,
-  HStack,
-  Icon
-} from '@chakra-ui/react';
-import { FaTwitter, FaGithub, FaDiscord, FaTelegram } from 'react-icons/fa';
-import '../../styles/footer.css';
+import { Box, Flex, Text, Link, useColorModeValue } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
-export default function Footer() {
+const Footer = () => {
+  const year = new Date().getFullYear();
+  
   return (
-    <Box as="footer" className="footer-container">
-      <Container as={Stack} className="footer-inner">
-        <Flex className="footer-top">
-          <Stack direction="row" className="footer-nav">
-            <Link href="#">Home</Link>
-            <Link href="#">About</Link>
-            <Link href="#">Blog</Link>
-            <Link href="#">Contact</Link>
-          </Stack>
-          <HStack className="footer-social">
-            <Link href="#" isExternal className="glow-effect">
-              <Icon as={FaTwitter} />
-            </Link>
-            <Link href="#" isExternal className="glow-effect">
-              <Icon as={FaGithub} />
-            </Link>
-            <Link href="#" isExternal className="glow-effect">
-              <Icon as={FaDiscord} />
-            </Link>
-            <Link href="#" isExternal className="glow-effect">
-              <Icon as={FaTelegram} />
-            </Link>
-          </HStack>
-        </Flex>
-        <Divider className="footer-divider" />
-        <Text className="footer-copy">
-          © {new Date().getFullYear()} Synergy Network. All rights reserved.
+    <Box className="glass-footer" py={4}>
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        maxW="1200px"
+        mx="auto"
+        px={4}
+        justify="space-between"
+        align={{ base: 'center', md: 'center' }}
+        textAlign={{ base: 'center', md: 'left' }}
+      >
+        <Text fontSize="sm">
+          &copy; {year} Synergy Network. All rights reserved.
         </Text>
-      </Container>
+        
+        <Flex mt={{ base: 4, md: 0 }} gap={4}>
+          <Link as={RouterLink} to="/docs/terms" className="blue-glow" fontSize="sm">
+            Terms of Service
+          </Link>
+          <Link as={RouterLink} to="/docs/privacy" className="blue-glow" fontSize="sm">
+            Privacy Policy
+          </Link>
+          <Link as={RouterLink} to="/docs/faq" className="blue-glow" fontSize="sm">
+            FAQ
+          </Link>
+          <Link href="https://github.com/synergy-network" isExternal className="blue-glow" fontSize="sm">
+            GitHub
+          </Link>
+        </Flex>
+      </Flex>
     </Box>
   );
-}
+};
+
+export default Footer;
